@@ -3,6 +3,7 @@ import { Home } from "./pages/home/Home.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
 import { MemberLogin } from "./pages/member/MemberLogin.jsx";
 import { BoardList } from "./pages/board/BoardList.jsx";
+import { MemberSignup } from "./pages/member/MemberSignup.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       },
       // 페이지
       { path: "login", element: <MemberLogin /> },
+      { path: "signup", element: <MemberSignup /> },
     ],
   },
 ]);
