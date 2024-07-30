@@ -8,16 +8,45 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [showAndHide, setShowAndHide] = useState(false);
+
+  const account = useContext(LoginContext);
+
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  function handleLogin() {
+    axios
+      .post("/api/member/login", { id, password })
+      .then((res) => {
+        account.login(res.data.token);
+        toast({
+          status: "success",
+          description: "로그인 되었습니다.",
+          position: "bottom",
+        });
+        navigate("/");
+      })
+      .catch(() => {
+        toast({
+          status: "warning",
+          description: "이메일과 패스워드를 확인해주세요.",
+          position: "bottom",
+        });
+      });
+  }
 
   return (
     <Center>
@@ -61,7 +90,7 @@ export function MemberLogin() {
             </Link>
           </Box>
           <Box mb={6}>
-            <Button h={12} w={500}>
+            <Button h={12} w={500} onClick={handleLogin}>
               로그인
             </Button>
           </Box>
