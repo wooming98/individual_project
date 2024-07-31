@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Divider,
   Heading,
   Table,
   Tbody,
@@ -28,40 +29,50 @@ export function BoardList() {
   }, []);
 
   return (
-    <Box>
-      <Box>
-        <Heading>커뮤니티</Heading>
-      </Box>
-      <Box>
-        {account.isLoggedIn() && (
-          <Button onClick={() => navigate("/write")}>작성하기</Button>
-        )}
-      </Box>
-      <Box>
-        {boardList.length === 0 && <Center>조회 결과가 없습니다.</Center>}
-        {boardList.length > 0 && (
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>#</Th>
-                <Th>TITLE</Th>
-                <Th>
-                  <FontAwesomeIcon icon={faUserPen} />
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {boardList.map((board) => (
-                <Tr key={board.boardIndex}>
-                  <Td>{board.boardIndex}</Td>
-                  <Td>{board.title}</Td>
-                  <Td>{board.nickName}</Td>
+    <Center>
+      <Box w={{ base: "720px", sm: "640px", lg: "960px" }}>
+        <Box
+          border={"1px solid gray"}
+          borderRadius={"1rem"}
+          borderColor="#949192"
+          p={"1rem"}
+          mb={5}
+        >
+          <Heading size="lg">커뮤니티</Heading>
+          <Box>다양한 사람을 만나고 생각의 폭을 넓혀보세요.</Box>
+        </Box>
+        <Box>
+          {account.isLoggedIn() && (
+            <Button onClick={() => navigate("/write")}>작성하기</Button>
+          )}
+        </Box>
+        <Divider mt={5} borderColor="#949192" />
+        <Box mt={5}>
+          {boardList.length === 0 && <Center>조회 결과가 없습니다.</Center>}
+          {boardList.length > 0 && (
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>#</Th>
+                  <Th>TITLE</Th>
+                  <Th>
+                    <FontAwesomeIcon icon={faUserPen} />
+                  </Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        )}
+              </Thead>
+              <Tbody>
+                {boardList.map((board) => (
+                  <Tr key={board.boardIndex}>
+                    <Td>{board.boardIndex}</Td>
+                    <Td>{board.title}</Td>
+                    <Td>{board.nickName}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </Center>
   );
 }
