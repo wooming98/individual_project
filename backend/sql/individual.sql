@@ -19,3 +19,26 @@ create table authority
     member_index int         not null primary key references member (member_index),
     authtype     varchar(20) not null
 );
+
+# 보드 테이블 생성
+create table board
+(
+    board_index  int                                  not null auto_increment primary key,
+    member_index int                                  not null references member (member_index),
+    title        varchar(100)                         not null,
+    content      varchar(10000)                       not null,
+    inserted     datetime default current_timestamp() not null
+);
+
+alter table board
+    modify member_index int;
+
+select *
+from board;
+
+update board
+set member_index = 2
+where board_index = 4;
+
+insert into board(title, content)
+values ('제목이야', '내용이야2')

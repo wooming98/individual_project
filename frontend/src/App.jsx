@@ -5,6 +5,7 @@ import { MemberLogin } from "./pages/member/MemberLogin.jsx";
 import { BoardList } from "./pages/board/BoardList.jsx";
 import { MemberSignup } from "./pages/member/MemberSignup.jsx";
 import { LoginProvider } from "./components/LoginProvider.jsx";
+import { BoardWrite } from "./pages/board/BoardWrite.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       // 페이지
       { path: "login", element: <MemberLogin /> },
       { path: "signup", element: <MemberSignup /> },
+      { path: "write", element: <BoardWrite /> },
     ],
   },
 ]);
