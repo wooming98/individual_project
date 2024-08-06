@@ -38,4 +38,8 @@ public class BoardService {
 
         boardMapper.add(board);
     }
+
+    public Board get(Integer id) {
+        return boardMapper.get(id);
+    }
 }

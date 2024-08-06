@@ -28,6 +28,14 @@ export function BoardList() {
     axios.get("/api/board/list").then((res) => setBoardList(res.data));
   }, []);
 
+  function handleWrite() {
+    if (account.isLoggedIn()) {
+      navigate("/write");
+    } else {
+      navigate("/login");
+    }
+  }
+
   return (
     <Center>
       <Box w={{ base: "720px", sm: "640px", lg: "960px" }}>
@@ -42,9 +50,7 @@ export function BoardList() {
           <Box>다양한 사람을 만나고 생각의 폭을 넓혀보세요.</Box>
         </Box>
         <Box>
-          {account.isLoggedIn() && (
-            <Button onClick={() => navigate("/write")}>작성하기</Button>
-          )}
+          <Button onClick={handleWrite}>작성하기</Button>
         </Box>
         <Divider mt={5} borderColor="#949192" />
         <Box mt={5}>
@@ -62,7 +68,14 @@ export function BoardList() {
               </Thead>
               <Tbody>
                 {boardList.map((board) => (
-                  <Tr key={board.boardIndex}>
+                  <Tr
+                    _hover={{
+                      bgColor: "gray.200",
+                    }}
+                    cursor={"pointer"}
+                    onClick={() => navigate(`/board/${board.boardIndex}`)}
+                    key={board.boardIndex}
+                  >
                     <Td>{board.boardIndex}</Td>
                     <Td>{board.title}</Td>
                     <Td>{board.nickName}</Td>

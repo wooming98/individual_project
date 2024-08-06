@@ -21,4 +21,11 @@ public interface BoardMapper {
             VALUES(#{title}, #{content}, #{memberIndex})
             """)
     int add(Board board);
+
+    @Select("""
+            SELECT b.board_index, b.title, b.content, b.inserted ,m.nick_name, m.member_index
+            FROM board b join member m on b.member_index = m.member_index
+            WHERE board_index = #{boardIndex}
+            """)
+    Board get(Integer id);
 }

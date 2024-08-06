@@ -18,15 +18,17 @@ import { useNavigate } from "react-router-dom";
 export function BoardWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const editorRef = useRef(null);
   const toast = useToast();
   const navigate = useNavigate();
 
+  const editorRef = useRef(null);
+
+  // Editor 변경 사항 감지
   useEffect(() => {
     const editorInstance = editorRef.current.getInstance();
 
     const handleEditorChange = () => {
-      setContent(editorInstance.getMarkdown());
+      setContent(editorInstance.getHTML()); // HTML 형식으로 변경
     };
 
     editorInstance.on("change", handleEditorChange);
@@ -40,7 +42,7 @@ export function BoardWrite() {
     axios
       .post(
         "/api/board/add",
-        { title, content },
+        { title, content }, // HTML 내용 저장
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -70,13 +72,19 @@ export function BoardWrite() {
           <Box>
             <FormControl>
               <FormLabel>제목</FormLabel>
-              <Input h={12} mb={8} onChange={(e) => setTitle(e.target.value)} />
+              <Input
+                h={12}
+                mb={8}
+                placeholder="제목을 입력해주세요."
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </FormControl>
           </Box>
           <Box>
             <FormControl>
               <FormLabel>본문</FormLabel>
               <Editor
+                placeholder="내용을 입력해주세요."
                 ref={editorRef}
                 height="600px"
                 initialEditType="wysiwyg"
