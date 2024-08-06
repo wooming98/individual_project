@@ -1,10 +1,7 @@
 package com.backend.mapper.board;
 
 import com.backend.domain.board.Board;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -48,4 +45,12 @@ public interface BoardMapper {
             WHERE board_index = #{id}
             """)
     int delete(Integer id);
+
+    // 해당 게시물 수정
+    @Update("""
+            UPDATE board
+            SET title=#{title}, content=#{content}
+            WHERE board_index = #{boardIndex}
+            """)
+    int edit(Board board);
 }

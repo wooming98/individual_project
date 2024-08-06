@@ -29,10 +29,12 @@ export function BoardView() {
   const navigate = useNavigate();
   const account = useContext(LoginContext);
 
+  // 해당 게시물 보기
   useEffect(() => {
     axios.get(`/api/board/${id}`).then((res) => setBoard(res.data));
   }, []);
 
+  // 해당 게시물 삭제
   function handleDelete() {
     axios
       .delete(`/api/board/${id}`, {
@@ -70,7 +72,11 @@ export function BoardView() {
                         <FontAwesomeIcon icon={faEllipsis} />
                       </MenuButton>
                       <MenuList>
-                        <MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            navigate(`/board/edit/${board.boardIndex}`);
+                          }}
+                        >
                           <Text>
                             <FontAwesomeIcon icon={faPenToSquare} /> 수정하기
                           </Text>

@@ -7,6 +7,7 @@ import { MemberSignup } from "./pages/member/MemberSignup.jsx";
 import { LoginProvider } from "./components/LoginProvider.jsx";
 import { BoardWrite } from "./pages/board/BoardWrite.jsx";
 import { BoardView } from "./pages/board/BoardView.jsx";
+import { BoardEdit } from "./pages/board/BoardEdit.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "signup", element: <MemberSignup /> },
       { path: "write", element: <BoardWrite /> },
       { path: "board/:id", element: <BoardView /> },
+      { path: "board/edit/:id", element: <BoardEdit /> },
     ],
   },
 ]);

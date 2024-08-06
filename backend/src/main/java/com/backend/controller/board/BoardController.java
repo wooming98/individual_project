@@ -58,4 +58,19 @@ public class BoardController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    // 글 수정
+    @PutMapping("edit")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity update(@RequestBody Board board, Authentication authentication) {
+        if (!boardService.hasAccess(board.getMemberIndex(), authentication)) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (boardService.validate(board)) {
+            boardService.edit(board);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
