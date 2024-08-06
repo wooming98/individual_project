@@ -41,6 +41,11 @@ export function LoginProvider({ children }) {
     return Date.now() < expired * 1000;
   }
 
+  // 자기 자신인지?
+  function hasAccess(param) {
+    return memberIndex == param;
+  }
+
   return (
     <LoginContext.Provider
       value={{
@@ -49,6 +54,7 @@ export function LoginProvider({ children }) {
         login: login,
         logout: logout,
         isLoggedIn: isLoggedIn,
+        hasAccess: hasAccess,
       }}
     >
       {children}

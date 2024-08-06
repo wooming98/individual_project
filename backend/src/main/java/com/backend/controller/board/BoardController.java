@@ -47,4 +47,15 @@ public class BoardController {
 
         return ResponseEntity.ok().body(board);
     }
+
+    // 글 삭제
+    @DeleteMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity delete(@PathVariable Integer id, Authentication authentication) {
+        if (boardService.hasAccess(id, authentication)) {
+            boardService.delete(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
 }

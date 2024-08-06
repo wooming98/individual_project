@@ -42,4 +42,17 @@ public class BoardService {
     public Board get(Integer id) {
         return boardMapper.get(id);
     }
+
+    // 접근 권한이 있는지 확인
+    public boolean hasAccess(Integer id, Authentication authentication) {
+        Board board = boardMapper.selectById(id);
+
+        return board.getMemberIndex()
+                .equals(Integer.valueOf(authentication.getName()));
+    }
+
+    // 글 삭제
+    public void delete(Integer id) {
+        boardMapper.delete(id);
+    }
 }

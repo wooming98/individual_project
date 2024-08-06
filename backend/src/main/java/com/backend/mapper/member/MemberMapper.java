@@ -25,6 +25,7 @@ public interface MemberMapper {
             """)
     Member selectById(String id);
 
+    // 권한 타입 가져오기
     @Select("""
             SELECT authtype
             FROM authority
