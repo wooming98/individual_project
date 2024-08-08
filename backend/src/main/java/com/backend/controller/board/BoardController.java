@@ -63,7 +63,7 @@ public class BoardController {
     @PutMapping("edit")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity update(@RequestBody Board board, Authentication authentication) {
-        if (!boardService.hasAccess(board.getMemberIndex(), authentication)) {
+        if (!boardService.hasAccess(board.getBoardIndex(), authentication)) {
             return ResponseEntity.badRequest().build();
         }
         if (boardService.validate(board)) {

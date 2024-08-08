@@ -46,7 +46,7 @@ public class BoardService {
     // 접근 권한이 있는지 확인
     public boolean hasAccess(Integer id, Authentication authentication) {
         Board board = boardMapper.selectById(id);
-
+        System.out.println(board);
         return board.getMemberIndex()
                 .equals(Integer.valueOf(authentication.getName()));
     }

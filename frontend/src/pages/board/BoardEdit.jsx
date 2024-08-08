@@ -45,9 +45,13 @@ export function BoardEdit() {
   }, []);
 
   function handleUpdate() {
-    axios.put(`/api/board/edit`, board, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    axios
+      .put("/api/board/edit", board, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        navigate("/");
+      });
   }
 
   if (board === null) {
