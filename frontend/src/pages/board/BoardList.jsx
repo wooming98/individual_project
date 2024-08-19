@@ -27,7 +27,7 @@ export function BoardList() {
 
   useEffect(() => {
     axios.get(`/api/board/list?${searchParams}`).then((res) => setBoardList(res.data));
-  }, []);
+  }, [searchParams]);
 
   function handleWrite() {
     if (account.isLoggedIn()) {
@@ -85,6 +85,16 @@ export function BoardList() {
               </Tbody>
             </Table>
           )}
+          <Box>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((pageNumber) => (
+                <Button
+                    onClick={() => navigate(`/?page=${pageNumber}`)}
+                    key={pageNumber}
+                >
+                  {pageNumber}
+                </Button>
+            ))}
+          </Box>
         </Box>
       </Box>
     </Center>
