@@ -17,8 +17,9 @@ public class BoardService {
     private final BoardMapper boardMapper;
 
     // 글 목록
-    public List<Board> list() {
-        return boardMapper.list();
+    public List<Board> list(Integer page) {
+        Integer offset = (page - 1) * 10;
+        return boardMapper.list(offset);
     }
 
     // 글 등록 시 입력값이 null, 공백인 경우 잡아내는 메소드

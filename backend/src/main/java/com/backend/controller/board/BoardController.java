@@ -19,8 +19,8 @@ public class BoardController {
 
     // 글 목록
     @GetMapping("list")
-    public List<Board> list() {
-        return boardService.list();
+    public List<Board> list(@RequestParam(defaultValue = "1") Integer page) {
+        return boardService.list(page);
     }
 
     // 글 작성

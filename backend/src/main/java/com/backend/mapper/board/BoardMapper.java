@@ -12,8 +12,9 @@ public interface BoardMapper {
             SELECT b.board_index, b.title, b.inserted ,m.nick_name
             FROM board b join member m on b.member_index = m.member_index
             ORDER BY b.inserted DESC
+            LIMIT #{offset}, 10
             """)
-    List<Board> list();
+    List<Board> list(Integer offset);
 
     // 게시글 등록
     @Insert("""
