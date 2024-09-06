@@ -38,7 +38,7 @@ public class SecurityConfiguration {
 
         // 경로별 인가 권한
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/api/member/login", "/").permitAll()
+                .requestMatchers("/**").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated());
 

@@ -23,7 +23,6 @@ public class MemberService {
 
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtEncoder jwtEncoder;
 
     // 회원가입 시 입력값이 null, 공백인 경우 잡아내는 메소드
     public boolean signupValidate(Member member) {
