@@ -1,6 +1,6 @@
 package com.backend.config;
 
-import com.backend.jwt.CustomLoginFilter;
+import com.backend.security.CustomLoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -23,7 +23,7 @@ public interface MemberMapper {
             FROM member
             WHERE username = #{username}
             """)
-    Member selectById(String id);
+    Member selectByUsername(String username);
 
     // 권한 타입 가져오기
     @Select("""

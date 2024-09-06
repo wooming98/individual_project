@@ -12,12 +12,14 @@ create table member
 alter table member
     modify password varchar(255);
 
+
 # 권한 테이블 생성
-create table authority
-(
-    member_index int         not null primary key references member (member_index),
-    authtype     varchar(20) not null
-);
+# create table authority
+# (
+#     member_index int         not null primary key references member (member_index),
+#     authtype     varchar(20) not null
+# );
+
 
 # 보드 테이블 생성
 create table board
@@ -28,9 +30,6 @@ create table board
     content      varchar(10000)                       not null,
     inserted     datetime default current_timestamp() not null
 );
-
-alter table board
-    modify member_index int;
 
 select *
 from board;
