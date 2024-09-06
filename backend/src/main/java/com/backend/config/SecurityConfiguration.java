@@ -1,6 +1,7 @@
 package com.backend.config;
 
 import com.backend.security.CustomLoginFilter;
+import com.backend.security.JWTFilter;
 import com.backend.security.JWTUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,6 +59,9 @@ public class SecurityConfiguration {
                 .requestMatchers("/**").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated());
+
+        //JWTFilter 등록
+        http.addFilterBefore(new JWTFilter(jwtUtil), CustomLoginFilter.class);
 
         //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
         http.addFilterAt(new CustomLoginFilter(authenticationManager(authenticationConfiguration), jwtUtil) ,UsernamePasswordAuthenticationFilter.class);
