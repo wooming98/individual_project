@@ -24,6 +24,9 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+
+        // 커스텀 로그인 경로 설정
+        setFilterProcessesUrl("/api/member/login");
     }
 
     @Override
