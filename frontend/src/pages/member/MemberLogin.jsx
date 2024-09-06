@@ -11,27 +11,27 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function MemberLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showAndHide, setShowAndHide] = useState(false);
 
-  const account = useContext(LoginContext);
-
   const navigate = useNavigate();
   const toast = useToast();
 
   function handleLogin() {
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+
     axios
-      .post("/api/member/login", { username, password })
-      .then((res) => {
-        account.login(res.data.token);
+      .post("/api/member/login", formData)
+      .then(() => {
         toast({
           status: "success",
           description: "로그인 되었습니다.",
