@@ -13,11 +13,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JWTUtil jwtUtil;
 
 
-    public CustomLoginFilter(AuthenticationManager authenticationManager) {
+    public CustomLoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
 
         this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
