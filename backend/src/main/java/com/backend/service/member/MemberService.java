@@ -27,7 +27,7 @@ public class MemberService {
 
     // 회원가입 시 입력값이 null, 공백인 경우 잡아내는 메소드
     public boolean signupValidate(Member member) {
-        if (member.getId() == null || member.getId().isBlank()) {
+        if (member.getUsername() == null || member.getUsername().isBlank()) {
             return false;
         }
         if (member.getPassword() == null || member.getPassword().isBlank()) {
@@ -49,38 +49,4 @@ public class MemberService {
         memberMapper.signup(member);
     }
 
-    // 로그인 jwt 발급
-    public Map<String, Object> getToken(Member member) {
-
-        Map<String, Object> result = null;
-
-        Member dbMember = memberMapper.selectById(member.getId());
-
-        if (dbMember != null) {
-            if (passwordEncoder.matches(member.getPassword(), dbMember.getPassword())) {
-                result = new HashMap<>();
-                Instant now = Instant.now();
-
-                List<String> authType = memberMapper.selectAuthorityByMemberIndex(dbMember.getMemberIndex());
-
-                // 리스트의 요소가 공백으로 구분된 하나의 문자열로 결합
-                String authTypeString = authType.stream()
-                        .collect(Collectors.joining(" "));
-
-                JwtClaimsSet claims = JwtClaimsSet.builder()
-                        .issuer("self")
-                        .issuedAt(now)
-                        .expiresAt(now.plusSeconds(60 * 60 * 24 * 7))
-                        .subject(dbMember.getMemberIndex().toString())
-                        .claim("scope", authTypeString)
-                        .claim("id", dbMember.getId())
-                        .build();
-
-                String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-
-                result.put("token", token);
-            }
-        }
-        return result;
-    }
 }
