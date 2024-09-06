@@ -14,10 +14,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export function MemberSignup() {
-  const [id, setId] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-  const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
 
   const navigate = useNavigate();
@@ -25,7 +24,7 @@ export function MemberSignup() {
 
   function handleClick() {
     axios
-      .post("/api/member/signup", { id, password, email, nickName })
+      .post("/api/member/signup", { username, password, nickName })
       .then(() => {
         toast({
           status: "success",
@@ -63,9 +62,8 @@ export function MemberSignup() {
   // 하나라도 공백이면 버튼 비활성화
   if (
     !(
-      id.trim().length > 0 &&
+      username.trim().length > 0 &&
       password.trim().length > 0 &&
-      email.trim().length > 0 &&
       nickName.trim().length > 0
     )
   ) {
@@ -81,7 +79,7 @@ export function MemberSignup() {
         <Box mb={7}>
           <FormControl>
             <FormLabel>아이디</FormLabel>
-            <Input h={12} onChange={(e) => setId(e.target.value)} />
+            <Input h={12} onChange={(e) => setUsername(e.target.value)} />
           </FormControl>
         </Box>
         <Box mb={7}>
@@ -105,12 +103,6 @@ export function MemberSignup() {
             {isCheckedPassword || (
               <FormHelperText>암호가 일치하지 않습니다.</FormHelperText>
             )}
-          </FormControl>
-        </Box>
-        <Box mb={7}>
-          <FormControl>
-            <FormLabel>이메일</FormLabel>
-            <Input h={12} onChange={(e) => setEmail(e.target.value)} />
           </FormControl>
         </Box>
         <Box mb={10}>

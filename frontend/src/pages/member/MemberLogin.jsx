@@ -18,7 +18,7 @@ import axios from "axios";
 import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function MemberLogin() {
-  const [id, setId] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showAndHide, setShowAndHide] = useState(false);
 
@@ -29,7 +29,7 @@ export function MemberLogin() {
 
   function handleLogin() {
     axios
-      .post("/api/member/login", { id, password })
+      .post("/api/member/login", { username, password })
       .then((res) => {
         account.login(res.data.token);
         toast({
@@ -58,7 +58,7 @@ export function MemberLogin() {
           <Box>
             <FormControl>
               <FormLabel>아이디</FormLabel>
-              <Input h={12} onChange={(e) => setId(e.target.value)} />
+              <Input h={12} onChange={(e) => setUsername(e.target.value)} />
             </FormControl>
           </Box>
           <Box>

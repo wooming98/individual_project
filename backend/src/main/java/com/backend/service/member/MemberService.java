@@ -32,9 +32,6 @@ public class MemberService {
         if (member.getPassword() == null || member.getPassword().isBlank()) {
             return false;
         }
-        if (member.getEmail() == null || member.getEmail().isBlank()) {
-            return false;
-        }
         if (member.getNickName() == null || member.getNickName().isBlank()) {
             return false;
         }

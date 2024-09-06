@@ -12,8 +12,8 @@ public interface MemberMapper {
 
     // 회원가입
     @Insert("""
-            INSERT INTO member (id, password, email, nick_name)
-            VALUES (#{id}, #{password}, #{email}, #{nickName})
+            INSERT INTO member (username, password, nick_name)
+            VALUES (#{username}, #{password}, #{nickName})
             """)
     int signup(Member member);
 
@@ -21,7 +21,7 @@ public interface MemberMapper {
     @Select("""
             SELECT *
             FROM member
-            WHERE id = #{id}
+            WHERE username = #{username}
             """)
     Member selectById(String id);
 
