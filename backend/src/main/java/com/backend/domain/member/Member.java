@@ -10,7 +10,7 @@ public class Member {
     private Integer memberIndex;
     private String username;
     private String password;
-    private String nickName;
+    private String nickname;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inserted;
     private String role;
