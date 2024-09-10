@@ -1,60 +1,42 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
 export const LoginContext = createContext(null);
 
 export function LoginProvider({ children }) {
+  const [accessToken, setAccessToken] = useState(() => {
+    const token = localStorage.getItem("access");
+    return token ? token : null;
+  });
+
   const [memberIndex, setMemberIndex] = useState("");
-  const [id, setId] = useState("");
-  const [expired, setExpired] = useState(0);
-  const [authType, setAuthType] = useState([]);
 
+  // 상태가 변경될 때마다 로컬 스토리지에 저장
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token === null) {
-      return;
+    if (accessToken) {
+      localStorage.setItem("access", accessToken);
+    } else {
+      localStorage.removeItem("access");
     }
-    login(token);
-  }, []);
+  }, [accessToken]);
 
-  // 로그인
-  function login(token) {
-    localStorage.setItem("token", token);
+  const login = (token) => {
     const payload = jwtDecode(token);
-    setExpired(payload.exp);
-    setMemberIndex(payload.sub);
-    setId(payload.id);
-    setAuthType(payload.scope.split(" "));
-  }
+    setMemberIndex(payload.memberIndex);
+    setAccessToken(token);
+  };
 
-  // 로그아웃
-  function logout() {
-    localStorage.removeItem("token");
-    setExpired(0);
-    setMemberIndex("");
-    setId("");
-    setAuthType([]);
-  }
-
-  // 로그인 되어있는지
-  function isLoggedIn() {
-    return Date.now() < expired * 1000;
-  }
-
-  // 자기 자신인지?
-  function hasAccess(param) {
-    return memberIndex == param;
-  }
+  const logout = () => {
+    setAccessToken(null);
+  };
 
   return (
     <LoginContext.Provider
       value={{
-        memberIndex: memberIndex,
-        id: id,
-        login: login,
-        logout: logout,
-        isLoggedIn: isLoggedIn,
-        hasAccess: hasAccess,
+        memberIndex,
+        accessToken,
+        login,
+        logout,
       }}
     >
       {children}
