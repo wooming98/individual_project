@@ -28,7 +28,7 @@ export function Navbar() {
       >
         Home
       </Button>
-      {account.isLoggedIn() || (
+      {account.accessToken === null ? (
         <Button
           onClick={() => navigate("/login")}
           cursor={"pointer"}
@@ -40,9 +40,7 @@ export function Navbar() {
         >
           로그인/회원가입
         </Button>
-      )}
-
-      {account.isLoggedIn() && (
+      ) : (
         <Button
           onClick={() => {
             account.logout();
