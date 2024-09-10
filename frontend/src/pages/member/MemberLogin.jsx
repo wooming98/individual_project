@@ -11,41 +11,48 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function MemberLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showAndHide, setShowAndHide] = useState(false);
 
+  const { login } = useContext(LoginContext);
+
   const navigate = useNavigate();
   const toast = useToast();
 
-  function handleLogin() {
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
+  async function handleLogin() {
+    try {
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("password", password);
 
-    axios
-      .post("/api/member/login", formData)
-      .then(() => {
+      const response = await axios.post("/api/member/login", formData);
+
+      if (response.status === 200) {
+        const token = response.headers["authorization"].split(" ")[1];
+        login(token);
+
         toast({
           status: "success",
           description: "로그인 되었습니다.",
           position: "bottom",
         });
         navigate("/");
-      })
-      .catch(() => {
-        toast({
-          status: "warning",
-          description: "이메일과 패스워드를 확인해주세요.",
-          position: "bottom",
-        });
+      }
+    } catch (error) {
+      toast({
+        status: "warning",
+        description: "이메일과 패스워드를 확인해주세요.",
+        position: "bottom",
       });
+    }
   }
 
   return (
