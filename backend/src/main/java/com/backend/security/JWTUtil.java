@@ -40,11 +40,12 @@ public class JWTUtil {
     }
 
     // username, role, expiredMs을 받아 jwt 생성
-    public String createJwt(String username, String role, Long expiredMs) {
+    public String createJwt(String username, String role, Integer memberIndex, Long expiredMs) {
 
         return Jwts.builder()
                 .claim("username", username)
                 .claim("role", role)
+                .claim("memberIndex", memberIndex)
                 .issuedAt(new Date(System.currentTimeMillis())) // 토큰 발행 시간
                 .expiration(new Date(System.currentTimeMillis() + expiredMs)) // 토큰 소멸 시간
                 .signWith(secretKey)
