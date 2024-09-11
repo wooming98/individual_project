@@ -51,8 +51,8 @@ public class BoardController {
     // 글 삭제
     @DeleteMapping("{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity delete(@PathVariable Integer id, Authentication authentication) {
-        if (boardService.hasAccess(id, authentication)) {
+    public ResponseEntity delete(@PathVariable Integer id, @RequestParam Integer memberIndex) {
+        if (boardService.hasAccess(id, memberIndex)) {
             boardService.delete(id);
             return ResponseEntity.ok().build();
         }
@@ -62,8 +62,8 @@ public class BoardController {
     // 글 수정
     @PutMapping("edit")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity update(@RequestBody Board board, Authentication authentication) {
-        if (!boardService.hasAccess(board.getBoardIndex(), authentication)) {
+    public ResponseEntity update(@RequestBody Board board, @RequestParam Integer memberIndex) {
+        if (!boardService.hasAccess(board.getBoardIndex(), memberIndex)) {
             return ResponseEntity.badRequest().build();
         }
         if (boardService.validate(board)) {
