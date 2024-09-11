@@ -29,6 +29,7 @@ export function LoginProvider({ children }) {
 
   const logout = () => {
     setAccessToken(null);
+    setMemberIndex("");
   };
 
   return (
