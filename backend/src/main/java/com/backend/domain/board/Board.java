@@ -13,5 +13,5 @@ public class Board {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inserted;
     private Integer memberIndex;
-    private String nickName;
+    private String nickname;
 }

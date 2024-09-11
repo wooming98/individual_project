@@ -27,9 +27,9 @@ public class BoardController {
     @PostMapping("add")
     // 메서드 호출 전에 로그인 여부 확인
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity add(@RequestBody Board board, Authentication authentication) {
+    public ResponseEntity add(@RequestBody Board board) {
         if (boardService.validate(board)) {
-            boardService.add(board, authentication);
+            boardService.add(board);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();

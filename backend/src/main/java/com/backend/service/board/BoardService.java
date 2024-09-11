@@ -34,8 +34,7 @@ public class BoardService {
     }
 
     // 글 등록
-    public void add(Board board, Authentication authentication) {
-        board.setMemberIndex(Integer.valueOf(authentication.getName()));
+    public void add(Board board) {
 
         boardMapper.add(board);
     }
