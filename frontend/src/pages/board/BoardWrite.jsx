@@ -11,9 +11,10 @@ import {
 } from "@chakra-ui/react";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function BoardWrite() {
   const [title, setTitle] = useState("");
@@ -22,6 +23,8 @@ export function BoardWrite() {
   const navigate = useNavigate();
 
   const editorRef = useRef(null);
+
+  const { memberIndex } = useContext(LoginContext);
 
   // Editor 변경 사항 감지
   useEffect(() => {
@@ -42,10 +45,10 @@ export function BoardWrite() {
     axios
       .post(
         "/api/board/add",
-        { title, content }, // HTML 내용 저장
+        { title, content, memberIndex },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
           },
         },
       )

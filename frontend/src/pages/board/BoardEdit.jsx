@@ -8,17 +8,22 @@ import {
   FormLabel,
   Input,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { Editor } from "@toast-ui/react-editor";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function BoardEdit() {
   const [board, setBoard] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const toast = useToast();
   const editorRef = useRef(null);
+
+  const { memberIndex } = useContext(LoginContext);
 
   // Editor 변경 사항 감지
   useEffect(() => {
@@ -46,10 +51,17 @@ export function BoardEdit() {
 
   function handleUpdate() {
     axios
-      .put("/api/board/edit", board, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      .put(`/api/board/edit?memberIndex=${memberIndex}`, board, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
       })
       .then(() => {
+        toast({
+          description: "글이 수정되었습니다.",
+          status: "success",
+          position: "bottom",
+        });
         navigate("/");
       });
   }

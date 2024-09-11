@@ -15,7 +15,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { faUserPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function BoardList() {
@@ -26,11 +26,13 @@ export function BoardList() {
   const account = useContext(LoginContext);
 
   useEffect(() => {
-    axios.get(`/api/board/list?${searchParams}`).then((res) => setBoardList(res.data));
+    axios
+      .get(`/api/board/list?${searchParams}`)
+      .then((res) => setBoardList(res.data));
   }, [searchParams]);
 
   function handleWrite() {
-    if (account.isLoggedIn()) {
+    if (account.accessToken) {
       navigate("/write");
     } else {
       navigate("/login");
@@ -79,7 +81,7 @@ export function BoardList() {
                   >
                     <Td>{board.boardIndex}</Td>
                     <Td>{board.title}</Td>
-                    <Td>{board.nickName}</Td>
+                    <Td>{board.nickname}</Td>
                   </Tr>
                 ))}
               </Tbody>
@@ -87,12 +89,12 @@ export function BoardList() {
           )}
           <Box>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((pageNumber) => (
-                <Button
-                    onClick={() => navigate(`/?page=${pageNumber}`)}
-                    key={pageNumber}
-                >
-                  {pageNumber}
-                </Button>
+              <Button
+                onClick={() => navigate(`/?page=${pageNumber}`)}
+                key={pageNumber}
+              >
+                {pageNumber}
+              </Button>
             ))}
           </Box>
         </Box>

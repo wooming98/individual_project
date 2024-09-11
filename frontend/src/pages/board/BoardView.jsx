@@ -12,6 +12,7 @@ import {
   MenuList,
   Spinner,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { Viewer } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
@@ -27,7 +28,8 @@ export function BoardView() {
   const { id } = useParams();
   const [board, setBoard] = useState(null);
   const navigate = useNavigate();
-  const account = useContext(LoginContext);
+  const { memberIndex } = useContext(LoginContext);
+  const toast = useToast();
 
   // 해당 게시물 보기
   useEffect(() => {
@@ -37,10 +39,15 @@ export function BoardView() {
   // 해당 게시물 삭제
   function handleDelete() {
     axios
-      .delete(`/api/board/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      .delete(`/api/board/${id}?memberIndex=${memberIndex}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
       })
       .then(() => {
+        toast({
+          description: "글이 삭제되었습니다.",
+          status: "success",
+          position: "bottom",
+        });
         navigate("/");
       });
   }
@@ -64,9 +71,9 @@ export function BoardView() {
             <Flex w={"100%"} p={"1rem"}>
               <Flex direction={"column"} w={"100%"}>
                 <Flex w={"100%"} justify={"space-between"}>
-                  <Text>{board.nickName}</Text>
+                  <Text>{board.nickname}</Text>
                   {/* 자기 자신만 수정이나 삭제 보이게 하기 */}
-                  {account.hasAccess(board.memberIndex) && (
+                  {memberIndex === board.memberIndex && (
                     <Menu isLazy>
                       <MenuButton>
                         <FontAwesomeIcon icon={faEllipsis} />

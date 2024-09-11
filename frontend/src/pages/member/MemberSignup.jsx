@@ -17,14 +17,14 @@ export function MemberSignup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-  const [nickName, setNickName] = useState("");
+  const [nickname, setNickname] = useState("");
 
   const navigate = useNavigate();
   const toast = useToast();
 
   function handleClick() {
     axios
-      .post("/api/member/signup", { username, password, nickName })
+      .post("/api/member/signup", { username, password, nickname })
       .then(() => {
         toast({
           status: "success",
@@ -64,7 +64,7 @@ export function MemberSignup() {
     !(
       username.trim().length > 0 &&
       password.trim().length > 0 &&
-      nickName.trim().length > 0
+      nickname.trim().length > 0
     )
   ) {
     isDisabled = true;
@@ -108,7 +108,7 @@ export function MemberSignup() {
         <Box mb={10}>
           <FormControl>
             <FormLabel>닉네임</FormLabel>
-            <Input h={12} onChange={(e) => setNickName(e.target.value)} />
+            <Input h={12} onChange={(e) => setNickname(e.target.value)} />
           </FormControl>
         </Box>
         <Box mb={7}>
