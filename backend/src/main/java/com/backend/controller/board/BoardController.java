@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class BoardController {
 
     // 글 목록
     @GetMapping("list")
-    public List<Board> list(@RequestParam(defaultValue = "1") Integer page) {
+    public Map<String, Object> list(@RequestParam(defaultValue = "1") Integer page) {
         return boardService.list(page);
     }
 

@@ -54,4 +54,10 @@ public interface BoardMapper {
             WHERE board_index = #{boardIndex}
             """)
     int edit(Board board);
+
+    @Select("""
+            SELECT COUNT(*) FROM board
+            """)
+    Integer countAll();
+
 }
