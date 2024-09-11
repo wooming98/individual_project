@@ -15,6 +15,7 @@ export function LoginProvider({ children }) {
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem("access", accessToken);
+      login(accessToken);
     } else {
       localStorage.removeItem("access");
     }
