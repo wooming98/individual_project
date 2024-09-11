@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Divider,
+  Flex,
   Heading,
   Table,
   Tbody,
@@ -94,19 +95,21 @@ export function BoardList() {
               </Tbody>
             </Table>
           )}
-          <Box>
-            {pageNumbers.map((pageNumber) => (
-              <Button
-                onClick={() => navigate(`/?page=${pageNumber}`)}
-                key={pageNumber}
-                colorScheme={
-                  pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
-                }
-              >
-                {pageNumber}
-              </Button>
-            ))}
-          </Box>
+          <Center mt={10}>
+            <Flex gap={1}>
+              {pageNumbers.map((pageNumber) => (
+                <Button
+                  onClick={() => navigate(`/?page=${pageNumber}`)}
+                  key={pageNumber}
+                  colorScheme={
+                    pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
+                  }
+                >
+                  {pageNumber}
+                </Button>
+              ))}
+            </Flex>
+          </Center>
         </Box>
       </Box>
     </Center>
