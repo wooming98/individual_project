@@ -33,16 +33,22 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
+    public String getCategory(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
     // jwt가 만료되었는지 여부 확인
     public Boolean isExpired(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    // username, role, expiredMs을 받아 jwt 생성
-    public String createJwt(String username, String role, Integer memberIndex, Long expiredMs) {
+    // category(access, refresh 인지 구별), username, role, expiredMs을 받아 jwt 생성
+    public String createJwt(String category, String username, String role, Integer memberIndex, Long expiredMs) {
 
         return Jwts.builder()
+                .claim("category", category)
                 .claim("username", username)
                 .claim("role", role)
                 .claim("memberIndex", memberIndex)

@@ -36,8 +36,8 @@ export function MemberLogin() {
       const response = await axios.post("/api/member/login", formData);
 
       if (response.status === 200) {
-        const token = response.headers["authorization"].split(" ")[1];
-        login(token);
+        const accessToken = response.headers["access"];
+        login(accessToken);
 
         toast({
           status: "success",
