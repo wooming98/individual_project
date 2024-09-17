@@ -8,8 +8,8 @@ public interface RefreshMapper {
 
     // refresh 토큰 삽입
     @Insert("""
-            INSERT INTO refresh_token (user_id, refresh, expiration)
-            VALUES (#{username}, #[refresh], #{expiration})
+            INSERT INTO refresh_token (username, refresh, expiration)
+            VALUES (#{username}, #{refresh}, #{expiration})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertByRefresh(RefreshToken refreshToken);
