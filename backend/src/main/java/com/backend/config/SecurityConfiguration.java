@@ -3,6 +3,7 @@ package com.backend.config;
 import com.backend.domain.member.RefreshToken;
 import com.backend.mapper.member.RefreshMapper;
 import com.backend.security.CustomLoginFilter;
+import com.backend.security.CustomLogoutFilter;
 import com.backend.security.JWTFilter;
 import com.backend.security.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -91,11 +93,14 @@ public class SecurityConfiguration {
                 .requestMatchers("/reissue").permitAll()
                 .anyRequest().authenticated());
 
-        //JWTFilter 등록
+        // JWTFilter 등록
         http.addFilterBefore(new JWTFilter(jwtUtil), CustomLoginFilter.class);
 
-        //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
+        // 필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
         http.addFilterAt(new CustomLoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshMapper) ,UsernamePasswordAuthenticationFilter.class);
+
+        // 로그아웃 필터 추가
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshMapper), LogoutFilter.class);
 
         // 세션 설정
         http.sessionManagement((session) -> session

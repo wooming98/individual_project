@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 export const LoginContext = createContext(null);
 
@@ -27,9 +28,20 @@ export function LoginProvider({ children }) {
     setAccessToken(token);
   };
 
-  const logout = () => {
-    setAccessToken(null);
-    setMemberIndex("");
+  const logout = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("memberIndex", memberIndex);
+      const response = await axios.post("/api/member/logout", formData, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setAccessToken(null);
+        setMemberIndex("");
+      }
+    } catch (error) {
+      console.error("Logout failed : ", error);
+    }
   };
 
   return (
