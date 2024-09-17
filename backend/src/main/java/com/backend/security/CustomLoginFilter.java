@@ -46,15 +46,15 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         // 스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
 
-        //token에 담은 검증을 위한 AuthenticationManager로 전달
+        // token에 담은 검증을 위한 AuthenticationManager로 전달
         return authenticationManager.authenticate(authToken);
     }
 
-    //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
+    // 로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
 
-        //유저 정보
+        // 유저 정보
         String username = authentication.getName();
 
         CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
@@ -73,13 +73,13 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         // refresh 토큰 저장
         addRefreshToken(username, refresh, 86400000L);
 
-        //응답 설정
+        // 응답 설정
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
     }
 
-    //로그인 실패시 실행하는 메소드
+    // 로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
 
@@ -105,7 +105,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);  // 쿠키의 생명주기
         // cookie.setSecure(true);    // https 통신의 경우 이 값을 넣어줌
-        // cookie.setPath("/");       // 쿠키가 적용될 범위
+        cookie.setPath("/");         // 쿠키가 적용될 범위
         cookie.setHttpOnly(true);    // 클라이언트단에서 자바스크립트로 해당 쿠키를 접근하지 못하도록 함
 
         return cookie;
