@@ -1,5 +1,7 @@
 package com.backend.security;
 
+import com.backend.domain.member.RefreshToken;
+import com.backend.mapper.member.RefreshMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,20 +14,23 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
-
 
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final RefreshMapper refreshMapper;
 
 
-    public CustomLoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    public CustomLoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshMapper refreshMapper) {
 
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.refreshMapper = refreshMapper;
 
         // 커스텀 로그인 경로 설정
         setFilterProcessesUrl("/api/member/login");
@@ -65,6 +70,9 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access", username, role, memberIndex, 600000L);
         String refresh = jwtUtil.createJwt("refresh", username, role, memberIndex, 86400000L);
 
+        // refresh 토큰 저장
+        addRefreshToken(username, refresh, 86400000L);
+
         //응답 설정
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
@@ -78,13 +86,26 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setStatus(401);
     }
 
+    private void addRefreshToken(String username, String refresh, Long expiredMs) {
+
+        // 현재 시간 + 만료 시간으로 Timestamp 생성
+        Timestamp expiration = new Timestamp(System.currentTimeMillis() + expiredMs);
+
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setUsername(username);
+        refreshToken.setRefresh(refresh);
+        refreshToken.setExpiration(expiration);
+
+        refreshMapper.insertByRefresh(refreshToken);
+    }
+
     // 쿠키 생성 메소드
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);  // 쿠키의 생명주기
-        //cookie.setSecure(true);    // https 통신의 경우 이 값을 넣어줌
-        //cookie.setPath("/");       // 쿠키가 적용될 범위
+        // cookie.setSecure(true);    // https 통신의 경우 이 값을 넣어줌
+        // cookie.setPath("/");       // 쿠키가 적용될 범위
         cookie.setHttpOnly(true);    // 클라이언트단에서 자바스크립트로 해당 쿠키를 접근하지 못하도록 함
 
         return cookie;
