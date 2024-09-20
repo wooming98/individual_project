@@ -50,20 +50,14 @@ export function BoardEdit() {
   }, []);
 
   function handleUpdate() {
-    axios
-      .put(`/api/board/edit?memberIndex=${memberIndex}`, board, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-      })
-      .then(() => {
-        toast({
-          description: "글이 수정되었습니다.",
-          status: "success",
-          position: "bottom",
-        });
-        navigate("/");
+    axios.put(`/api/board/edit?memberIndex=${memberIndex}`, board).then(() => {
+      toast({
+        description: "글이 수정되었습니다.",
+        status: "success",
+        position: "bottom",
       });
+      navigate("/");
+    });
   }
 
   if (board === null) {

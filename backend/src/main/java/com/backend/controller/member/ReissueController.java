@@ -26,6 +26,7 @@ public class ReissueController {
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("reissue에 들어 온지 확인");
 
         // request 에서 모든 쿠키를 가져와서 그 쿠키 중 키 값이 refresh 값이 있을경우 가져옴
         String refresh = null;
@@ -42,7 +43,7 @@ public class ReissueController {
         if (refresh == null) {
 
             // response status code
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("refresh 토큰이 null 값임", HttpStatus.BAD_REQUEST);
         }
 
         // refresh 토큰 만료시간 체크
@@ -51,7 +52,7 @@ public class ReissueController {
         } catch (ExpiredJwtException e) {
 
             // response status code
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("refresh 토큰이 만료됨", HttpStatus.BAD_REQUEST);
         }
 
         // 토큰이 refresh 인지 확인 (발급시 페이로드에 명시)
@@ -60,16 +61,16 @@ public class ReissueController {
         if (!category.equals("refresh")) {
 
             // response status code
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("refresh 토큰이 아님", HttpStatus.BAD_REQUEST);
         }
 
         // DB에 refresh 가 저장되어 있는지
         Boolean isExist = refreshMapper.existsByRefresh(refresh);
 
-        if (!isExist) {
+        if (isExist == null || !isExist) {
 
             // response body
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("DB에 refresh 가 저장되어있지 않음", HttpStatus.BAD_REQUEST);
         }
 
         // 토큰에서 값 가져오기
@@ -78,7 +79,7 @@ public class ReissueController {
         Integer memberIndex = jwtUtil.getMemberIndex(refresh);
 
         // 가져온 값들로 새로운 access 토큰 생성
-        String newAccess = jwtUtil.createJwt("access", username, role, memberIndex,600000L);
+        String newAccess = jwtUtil.createJwt("access", username, role, memberIndex, 600000L);
         String newRefresh = jwtUtil.createJwt("refresh", username, role, memberIndex, 86400000L);
 
         // DB에 있는 기존의 refresh 토큰 삭제 후 새 refresh 토큰 저장
@@ -98,7 +99,7 @@ public class ReissueController {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);  // 쿠키의 생명주기
         // cookie.setSecure(true);    // https 통신의 경우 이 값을 넣어줌
-        // cookie.setPath("/");       // 쿠키가 적용될 범위
+        cookie.setPath("/");       // 쿠키가 적용될 범위
         cookie.setHttpOnly(true);    // 클라이언트단에서 자바스크립트로 해당 쿠키를 접근하지 못하도록 함
 
         return cookie;

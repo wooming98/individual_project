@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {

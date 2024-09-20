@@ -42,24 +42,14 @@ export function BoardWrite() {
   }, []);
 
   function handleClickSave() {
-    axios
-      .post(
-        "/api/board/add",
-        { title, content, memberIndex },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        },
-      )
-      .then(() => {
-        toast({
-          description: "글이 등록되었습니다.",
-          status: "success",
-          position: "bottom",
-        });
-        navigate("/");
+    axios.post("/api/board/add", { title, content, memberIndex }).then(() => {
+      toast({
+        description: "글이 등록되었습니다.",
+        status: "success",
+        position: "bottom",
       });
+      navigate("/");
+    });
   }
 
   return (

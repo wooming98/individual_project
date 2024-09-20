@@ -38,18 +38,14 @@ export function BoardView() {
 
   // 해당 게시물 삭제
   function handleDelete() {
-    axios
-      .delete(`/api/board/${id}?memberIndex=${memberIndex}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
-      })
-      .then(() => {
-        toast({
-          description: "글이 삭제되었습니다.",
-          status: "success",
-          position: "bottom",
-        });
-        navigate("/");
+    axios.delete(`/api/board/${id}?memberIndex=${memberIndex}`).then(() => {
+      toast({
+        description: "글이 삭제되었습니다.",
+        status: "success",
+        position: "bottom",
       });
+      navigate("/");
+    });
   }
 
   // useEffect 훅이 데이터를 로드하기 전에 컴포넌트가 렌더링 될 수 있어 오류가 날 수 있으므로 필수 코드
