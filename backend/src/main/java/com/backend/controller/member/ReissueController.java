@@ -43,6 +43,7 @@ public class ReissueController {
         if (refresh == null) {
 
             // response status code
+            System.out.println("refresh 토큰이 null 값임");
             return new ResponseEntity<>("refresh 토큰이 null 값임", HttpStatus.BAD_REQUEST);
         }
 
@@ -52,6 +53,7 @@ public class ReissueController {
         } catch (ExpiredJwtException e) {
 
             // response status code
+            System.out.println("refresh 토큰이 만료됨");
             return new ResponseEntity<>("refresh 토큰이 만료됨", HttpStatus.BAD_REQUEST);
         }
 
@@ -61,6 +63,7 @@ public class ReissueController {
         if (!category.equals("refresh")) {
 
             // response status code
+            System.out.println("refresh 토큰이 아님");
             return new ResponseEntity<>("refresh 토큰이 아님", HttpStatus.BAD_REQUEST);
         }
 
@@ -70,6 +73,7 @@ public class ReissueController {
         if (isExist == null || !isExist) {
 
             // response body
+            System.out.println("DB에 refresh 가 저장되어있지 않음");
             return new ResponseEntity<>("DB에 refresh 가 저장되어있지 않음", HttpStatus.BAD_REQUEST);
         }
 
@@ -84,7 +88,7 @@ public class ReissueController {
 
         // DB에 있는 기존의 refresh 토큰 삭제 후 새 refresh 토큰 저장
         refreshMapper.deleteByRefresh(refresh);
-        addRefreshToken(username, refresh, 86400000L);
+        addRefreshToken(username, newRefresh, 86400000L);
 
         // response, 응답 헤더에 새로운 access 값 넣기
         response.setHeader("access", newAccess);

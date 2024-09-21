@@ -16,10 +16,9 @@ public interface RefreshMapper {
 
     // refresh 토큰이 있는지
     @Select("""
-            SELECT 1 
+            SELECT *
             FROM refresh_token 
             WHERE refresh = #{refresh} 
-            LIMIT 1
             """)
     Boolean existsByRefresh(String refresh);
 

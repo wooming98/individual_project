@@ -10,9 +10,6 @@ import { BoardView } from "./pages/board/BoardView.jsx";
 import { BoardEdit } from "./pages/board/BoardEdit.jsx";
 import axios from "axios"; // 쿠키를 자동으로 포함
 
-// 쿠키를 자동으로 포함
-axios.defaults.withCredentials = true;
-
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem("access");

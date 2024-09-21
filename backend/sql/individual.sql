@@ -39,4 +39,24 @@ set member_index = 2
 where board_index = 4;
 
 insert into board(title, content)
-values ('제목이야', '내용이야2')
+values ('제목이야', '내용이야2');
+
+# refresh 테이블 생성
+CREATE TABLE refresh_token
+(
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    username   VARCHAR(255) NOT NULL,
+    refresh    VARCHAR(512) NOT NULL UNIQUE,
+    expiration TIMESTAMP    NOT NULL
+);
+
+select *
+from refresh_token;
+
+
+delete
+from refresh_token;
+
+
+select *
+from member;
