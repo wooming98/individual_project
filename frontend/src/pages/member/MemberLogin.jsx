@@ -29,11 +29,18 @@ export function MemberLogin() {
 
   async function handleLogin() {
     try {
-      const formData = new FormData();
-      formData.append("username", username);
-      formData.append("password", password);
+      // JSON 형식의 데이터 객체 생성
+      const data = {
+        username: username,
+        password: password,
+      };
 
-      const response = await axios.post("/api/member/login", formData);
+      // POST 요청을 JSON으로 전송
+      const response = await axios.post("/api/member/login", data, {
+        headers: {
+          "Content-Type": "application/json", // JSON 형식으로 전송
+        },
+      });
 
       if (response.status === 200) {
         const accessToken = response.headers["access"];
