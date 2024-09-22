@@ -13,7 +13,7 @@ public interface MemberMapper {
     // 회원가입
     @Insert("""
             INSERT INTO member (username, password, nick_name)
-            VALUES (#{username}, #{password}, #{nickName})
+            VALUES (#{username}, #{password}, #{nickname})
             """)
     int signup(Member member);
 
