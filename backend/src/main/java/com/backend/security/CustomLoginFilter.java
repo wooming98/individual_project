@@ -47,9 +47,13 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         Member member = new Member();
 
         try {
+            // JSON 데이터를 JAVA 객체로 변환하기 위한 도구
             ObjectMapper objectMapper = new ObjectMapper();
+            // HTTP 요청의 본문(body)을 입력 스트림으로 읽어옴. 이 스트림에는 클라리언트가 전송한 로그인 데이터가 JSON 형식으로 포함되어 있음
             ServletInputStream inputStream = request.getInputStream();
+            // 입력 스트림에 있는 데이터를 문자열로 변환. 이 과정에서 UTF-8 인코딩을 사용하여 JSON 데이터를 읽음
             String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+            // 앞서 추출한 messageBody 문자열을 JSON 형식에서 Java 객체로 변환.
             member = objectMapper.readValue(messageBody, Member.class);
 
         } catch (IOException e) {
