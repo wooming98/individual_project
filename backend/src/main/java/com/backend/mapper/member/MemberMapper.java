@@ -32,4 +32,12 @@ public interface MemberMapper {
             WHERE member_index = #{memberIndex}
             """)
     List<String> selectAuthorityByMemberIndex(Integer memberIndex);
+
+    // 해당 닉네임의 멤버가 있는지
+    @Select("""
+            SELECT *
+            FROM member
+            WHERE nick_name = #{nickName}
+            """)
+    Member selectByNickname(String nickname);
 }

@@ -45,4 +45,13 @@ public class MemberService {
         memberMapper.signup(member);
     }
 
+    // 닉네임을 가진 멤버가 있는지 확인 메소드
+    public Member getByNickname(String nickname) {
+        return memberMapper.selectByNickname(nickname.trim());
+    }
+
+    // 유저네임을 가진 멤버가 있는지 확인 메소드
+    public Member getByUsername(String username) {
+        return memberMapper.selectByUsername(username.trim());
+    }
 }
