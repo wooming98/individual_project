@@ -3,6 +3,7 @@ package com.backend.controller.member;
 import com.backend.domain.member.Member;
 import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -48,11 +49,26 @@ public class MemberController {
         return ResponseEntity.notFound().build();
     }
 
-    // 프로필
+    // 프로필 정보 가져오기
     @GetMapping("profile")
     public ResponseEntity profile(Authentication authentication) {
-        System.out.println(authentication.getName());
-        return null;
-    }
+        Member member = memberService.getByUsername(authentication.getName());
 
+        if(member == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(member);
+        }
+    }
+    
+    // 회원 정보 수정
+    @PutMapping("modify")
+    public ResponseEntity modify(@RequestBody Member member, Authentication authentication) {
+        if(memberService.hasAccessModify(member, authentication)) {
+            memberService.modify(member, authentication);
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
 }

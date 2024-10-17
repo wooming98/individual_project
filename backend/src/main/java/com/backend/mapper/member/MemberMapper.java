@@ -4,6 +4,7 @@ import com.backend.domain.member.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -37,7 +38,15 @@ public interface MemberMapper {
     @Select("""
             SELECT *
             FROM member
-            WHERE nick_name = #{nickName}
+            WHERE nick_name = #{nickname}
             """)
     Member selectByNickname(String nickname);
+
+    // 회원 정보 수정
+    @Update("""
+            UPDATE member
+            SET nick_name = #{nickname}
+            WHERE member_index = #{memberIndex}
+            """)
+    int update(Member member);
 }

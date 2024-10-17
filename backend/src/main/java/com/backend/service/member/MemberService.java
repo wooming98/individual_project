@@ -2,8 +2,11 @@ package com.backend.service.member;
 
 import com.backend.domain.member.Member;
 import com.backend.mapper.member.MemberMapper;
+import com.backend.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -53,5 +56,26 @@ public class MemberService {
     // 유저네임을 가진 멤버가 있는지 확인 메소드
     public Member getByUsername(String username) {
         return memberMapper.selectByUsername(username.trim());
+    }
+
+    // 회원 정보 수정 시 유효성 검사
+    public boolean hasAccessModify(Member member, Authentication authentication) {
+        if(!authentication.getName().equals(member.getUsername())) {
+            System.out.println(authentication.getName());
+            System.out.println(member.getUsername());
+            return false;
+        }
+
+        Member dbMember = memberMapper.selectByUsername(member.getUsername());
+        if (dbMember == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // 회원 정보 수정
+    public void modify(Member member, Authentication authentication) {
+        memberMapper.update(member);
     }
 }
