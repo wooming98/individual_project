@@ -11,6 +11,7 @@ import {
   Heading,
   Input,
   Spinner,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -18,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 export function MemberProfile() {
   const [member, setMember] = useState(null);
+  const [memberIndex, setMemberIndex] = useState("");
   const [oldNickname, setOldNickname] = useState("");
   const [isCheckedNickname, setIsCheckedNickname] = useState(false);
 
@@ -30,6 +32,7 @@ export function MemberProfile() {
       const resMember = res.data;
       setMember({ ...resMember });
       setOldNickname(resMember.nickname);
+      setMemberIndex(resMember.memberIndex);
     });
   }, []);
 
@@ -71,6 +74,10 @@ export function MemberProfile() {
       });
   }
 
+  function handleClickDelete() {
+    axios.delete(`/api/member/${memberIndex}`);
+  }
+
   // 조건에 맞지 않을 시 저장(수정) 버튼 비활성화
   let isDisabled = false;
 
@@ -83,43 +90,45 @@ export function MemberProfile() {
     isDisabled = true;
   }
 
-  if (member === null) {
-    return <Spinner />;
-  }
-
   function handleClickPasswordChanges() {
     navigate("/password-changes");
   }
 
+  if (member === null) {
+    return <Spinner />;
+  }
+
   return (
     <Center>
-      <Box w={500}>
+      <Box w={720}>
         <Heading size={"md"} mb={10}>
           회원정보
         </Heading>
-        <Box mb={7}>
-          <FormControl>
-            <FormLabel>이메일</FormLabel>
-            <Input h={12} value={member.username} readOnly />
-          </FormControl>
-        </Box>
-        <Box mb={7}>
-          <FormControl>
-            <FormLabel>닉네임</FormLabel>
-            <Input
-              h={12}
-              value={member.nickname}
-              onChange={(e) => {
-                const newNickname = e.target.value.trim();
-                setMember({ ...member, nickname: newNickname });
-              }}
-            />
-            {isCheckedNickname && (
-              <FormHelperText color="dodgerblue">
-                사용 가능한 닉네임입니다.
-              </FormHelperText>
-            )}
-          </FormControl>
+        <Box w={500}>
+          <Box mb={7}>
+            <FormControl>
+              <FormLabel>이메일</FormLabel>
+              <Input h={12} value={member.username} readOnly />
+            </FormControl>
+          </Box>
+          <Box mb={7}>
+            <FormControl>
+              <FormLabel>닉네임</FormLabel>
+              <Input
+                h={12}
+                value={member.nickname}
+                onChange={(e) => {
+                  const newNickname = e.target.value.trim();
+                  setMember({ ...member, nickname: newNickname });
+                }}
+              />
+              {isCheckedNickname && (
+                <FormHelperText color="dodgerblue">
+                  사용 가능한 닉네임입니다.
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Box>
         </Box>
         <Flex justify={"flex-end"}>
           <Button
@@ -142,6 +151,33 @@ export function MemberProfile() {
             비밀번호 변경
           </Button>
         </Flex>
+        <Divider mt={7} borderColor="#949192" />
+        <Heading size={"md"} mt={7} mb={5}>
+          계정삭제
+        </Heading>
+        <Box>
+          <Box
+            rounded="md"
+            border="1px"
+            borderColor="#949192"
+            color={"#555555"}
+            p={4}
+          >
+            <Text>
+              회원 탈퇴 시, 계정 정보와 닉네임을 포함한 모든 개인 정보가 완전히
+              삭제되며,
+            </Text>
+            <Text>삭제된 데이터는 복구할 수 없습니다.</Text>
+          </Box>
+          <Flex justify={"flex-end"} mt={10}>
+            <Button
+              onClick={handleClickDelete}
+              style={{ backgroundColor: "#EF4444", color: "#ffffff" }}
+            >
+              회원 탈퇴
+            </Button>
+          </Flex>
+        </Box>
       </Box>
     </Center>
   );

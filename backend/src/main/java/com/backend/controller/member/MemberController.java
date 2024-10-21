@@ -3,6 +3,7 @@ package com.backend.controller.member;
 import com.backend.domain.member.Member;
 import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,5 +82,12 @@ public class MemberController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("{memberIndex}")
+    public ResponseEntity delete(@PathVariable Integer memberIndex) {
+        memberService.remove(memberIndex);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

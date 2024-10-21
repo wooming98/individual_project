@@ -107,4 +107,9 @@ public class MemberService {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberMapper.updatePassword(member);
     }
+
+    // 회원 탈퇴
+    public void remove(Integer memberIndex) {
+        memberMapper.deleteByMemberIndex(memberIndex);
+    }
 }
