@@ -49,4 +49,12 @@ public interface MemberMapper {
             WHERE member_index = #{memberIndex}
             """)
     int update(Member member);
+
+    // 회원 비밀번호 변경
+    @Update("""
+            UPDATE member
+            SET password = #{password}
+            WHERE member_index = #{memberIndex}
+            """)
+    int updatePassword(Member member);
 }

@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Center,
+  Divider,
   Flex,
   FormControl,
   FormHelperText,
@@ -10,9 +11,9 @@ import {
   Heading,
   Input,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { LoginContext } from "../../components/LoginProvider.jsx";
 import { useNavigate } from "react-router-dom";
 
 export function MemberProfile() {
@@ -21,7 +22,7 @@ export function MemberProfile() {
   const [isCheckedNickname, setIsCheckedNickname] = useState(false);
 
   const navigate = useNavigate();
-  const { memberIndex } = useContext(LoginContext);
+  const toast = useToast();
 
   // 화면이 렌더링 될 때 한 번 member 객체 가져오기
   useEffect(() => {
@@ -49,10 +50,25 @@ export function MemberProfile() {
     }
   }, [member]);
 
+  // 회원 정보 수정 버튼 함수
   function handleClickSave() {
-    axios.put(`api/member/modify`, { ...member }).then(() => {
-      navigate("/");
-    });
+    axios
+      .put(`api/member/modify`, { ...member })
+      .then(() => {
+        toast({
+          status: "success",
+          description: "정보가 수정되었습니다.",
+          position: "bottom",
+        });
+        navigate("/");
+      })
+      .catch(() => {
+        toast({
+          status: "error",
+          description: "오류가 발생했습니다.",
+          position: "bottom",
+        });
+      });
   }
 
   // 조건에 맞지 않을 시 저장(수정) 버튼 비활성화
@@ -69,6 +85,10 @@ export function MemberProfile() {
 
   if (member === null) {
     return <Spinner />;
+  }
+
+  function handleClickPasswordChanges() {
+    navigate("/password-changes");
   }
 
   return (
@@ -102,8 +122,24 @@ export function MemberProfile() {
           </FormControl>
         </Box>
         <Flex justify={"flex-end"}>
-          <Button onClick={handleClickSave} isDisabled={isDisabled}>
+          <Button
+            onClick={handleClickSave}
+            isDisabled={isDisabled}
+            style={{ backgroundColor: "#0090F9", color: "#ffffff" }}
+          >
             저장
+          </Button>
+        </Flex>
+        <Divider mt={7} borderColor="#949192" />
+        <Heading size={"md"} mt={7} mb={10}>
+          비밀번호 변경
+        </Heading>
+        <Flex justify={"flex-end"}>
+          <Button
+            onClick={handleClickPasswordChanges}
+            style={{ backgroundColor: "#EF4444", color: "#ffffff" }}
+          >
+            비밀번호 변경
           </Button>
         </Flex>
       </Box>

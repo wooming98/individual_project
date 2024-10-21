@@ -4,6 +4,7 @@ import com.backend.domain.member.Member;
 import com.backend.mapper.member.MemberMapper;
 import com.backend.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -75,7 +76,35 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public void modify(Member member, Authentication authentication) {
+    public void modify(Member member) {
         memberMapper.update(member);
+    }
+
+    // 회원 비밀번호 변경 시 유효성 검사
+    public boolean hasAccessModifyPassword(Member member, Authentication authentication) {
+        if(!authentication.getName().equals(member.getUsername())) {
+            return false;
+        }
+
+        Member dbMember = memberMapper.selectByUsername(member.getUsername());
+        if (dbMember == null) {
+            return false;
+        }
+
+        if(!passwordEncoder.matches(member.getOldPassword(), dbMember.getPassword())) {
+            return false;
+        }
+
+        if(member.getPassword().isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // 회원 비밀번호 변경
+    public void modifyPassword(Member member) {
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        memberMapper.updatePassword(member);
     }
 }

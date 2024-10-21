@@ -56,6 +56,15 @@ export function Navbar() {
           로그아웃
         </Button>
       )}
+      {account.accessToken && (
+        <Button
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          프로필
+        </Button>
+      )}
     </Flex>
   );
 }

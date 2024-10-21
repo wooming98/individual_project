@@ -9,7 +9,8 @@ import { BoardWrite } from "./pages/board/BoardWrite.jsx";
 import { BoardView } from "./pages/board/BoardView.jsx";
 import { BoardEdit } from "./pages/board/BoardEdit.jsx";
 import axios from "axios";
-import { MemberProfile } from "./pages/member/MemberProfile.jsx"; // 쿠키를 자동으로 포함
+import { MemberProfile } from "./pages/member/MemberProfile.jsx";
+import { MemberPasswordChanges } from "./pages/member/MemberPasswordChanges.jsx"; // 쿠키를 자동으로 포함
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -72,6 +73,8 @@ const router = createBrowserRouter([
       { path: "login", element: <MemberLogin /> },
       { path: "signup", element: <MemberSignup /> },
       { path: "profile", element: <MemberProfile /> },
+      { path: "password-changes", element: <MemberPasswordChanges /> },
+
       { path: "write", element: <BoardWrite /> },
       { path: "board/:id", element: <BoardView /> },
       { path: "board/edit/:id", element: <BoardEdit /> },

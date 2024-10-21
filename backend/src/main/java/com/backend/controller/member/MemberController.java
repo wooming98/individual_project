@@ -65,7 +65,18 @@ public class MemberController {
     @PutMapping("modify")
     public ResponseEntity modify(@RequestBody Member member, Authentication authentication) {
         if(memberService.hasAccessModify(member, authentication)) {
-            memberService.modify(member, authentication);
+            memberService.modify(member);
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+    
+    // 현재 비밀번호 확인
+    @PutMapping("modify-password")
+    public ResponseEntity modifyPassword(@RequestBody Member member, Authentication authentication) {
+        if(memberService.hasAccessModifyPassword(member, authentication)) {
+            memberService.modifyPassword(member);
             return ResponseEntity.ok(member);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
