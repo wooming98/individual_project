@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,12 +10,22 @@ import {
   FormLabel,
   Heading,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function MemberProfile() {
   const [member, setMember] = useState(null);
@@ -25,6 +35,10 @@ export function MemberProfile() {
 
   const navigate = useNavigate();
   const toast = useToast();
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const account = useContext(LoginContext);
 
   // 화면이 렌더링 될 때 한 번 member 객체 가져오기
   useEffect(() => {
@@ -75,7 +89,15 @@ export function MemberProfile() {
   }
 
   function handleClickDelete() {
-    axios.delete(`/api/member/${memberIndex}`);
+    axios.delete(`/api/member/${memberIndex}`).then(() => {
+      toast({
+        status: "success",
+        description: "탈퇴하였습니다.",
+        position: "bottom",
+      });
+      account.logout();
+      navigate("/");
+    });
   }
 
   // 조건에 맞지 않을 시 저장(수정) 버튼 비활성화
@@ -171,13 +193,35 @@ export function MemberProfile() {
           </Box>
           <Flex justify={"flex-end"} mt={10}>
             <Button
-              onClick={handleClickDelete}
+              onClick={onOpen}
               style={{ backgroundColor: "#EF4444", color: "#ffffff" }}
             >
               회원 탈퇴
             </Button>
           </Flex>
         </Box>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>회원 탈퇴</Text>
+                <Button style={{ backgroundColor: "white" }} onClick={onClose}>
+                  <FontAwesomeIcon icon={faXmark} size="lg" />
+                </Button>
+              </Flex>
+            </ModalHeader>
+            <ModalBody>정말로 탈퇴하시겠습니까?</ModalBody>
+            <ModalFooter>
+              <Button
+                onClick={handleClickDelete}
+                style={{ backgroundColor: "#0090F9", color: "#ffffff" }}
+              >
+                확인
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     </Center>
   );
