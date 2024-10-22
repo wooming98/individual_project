@@ -40,7 +40,6 @@ export function LoginProvider({ children }) {
       if (response.status === 200) {
         setAccessToken(null);
         setMemberIndex("");
-        window.location.reload();
       }
     } catch (error) {
       console.error("Logout failed : ", error);
