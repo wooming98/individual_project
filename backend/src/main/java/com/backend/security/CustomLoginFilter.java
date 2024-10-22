@@ -81,6 +81,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
         Integer memberIndex = customUserDetails.getMemberIndex();
+        String nickname = customUserDetails.getNickname();
 
         // 반복자를 통해 유저의 role 값 가져오기
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -89,8 +90,8 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         // 토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, memberIndex, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role, memberIndex, 86400000L);
+        String access = jwtUtil.createJwt("access", username, role, memberIndex, nickname, 600000L);
+        String refresh = jwtUtil.createJwt("refresh", username, role, memberIndex, nickname, 86400000L);
 
         // refresh 토큰 저장
         addRefreshToken(username, refresh, 86400000L);

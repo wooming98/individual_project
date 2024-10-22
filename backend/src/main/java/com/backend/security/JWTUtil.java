@@ -33,14 +33,22 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
+    // jwt에서 memberIndex 추출
     public Integer getMemberIndex(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("memberIndex", Integer.class);
     }
 
+    // jwt에서 category 추출
     public String getCategory(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
+    // jwt에서 nickname 추출
+    public String getNickname(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("nickname", String.class);
     }
 
     // jwt가 만료되었는지 여부 확인
@@ -50,13 +58,14 @@ public class JWTUtil {
     }
 
     // category(access, refresh 인지 구별), username, role, expiredMs을 받아 jwt 생성
-    public String createJwt(String category, String username, String role, Integer memberIndex, Long expiredMs) {
+    public String createJwt(String category, String username, String role, Integer memberIndex, String nickname, Long expiredMs) {
 
         return Jwts.builder()
                 .claim("category", category)
                 .claim("username", username)
                 .claim("role", role)
                 .claim("memberIndex", memberIndex)
+                .claim("nickname", nickname)
                 .issuedAt(new Date(System.currentTimeMillis())) // 토큰 발행 시간
                 .expiration(new Date(System.currentTimeMillis() + expiredMs)) // 토큰 소멸 시간
                 .signWith(secretKey)
