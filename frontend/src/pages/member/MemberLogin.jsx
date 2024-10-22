@@ -62,6 +62,12 @@ export function MemberLogin() {
     }
   }
 
+  function handleSubmitKeyDown(e) {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  }
+
   return (
     <Center>
       <Box w={500}>
@@ -72,7 +78,11 @@ export function MemberLogin() {
           <Box>
             <FormControl>
               <FormLabel>아이디</FormLabel>
-              <Input h={12} onChange={(e) => setUsername(e.target.value)} />
+              <Input
+                h={12}
+                onChange={(e) => setUsername(e.target.value)}
+                onKeyDown={handleSubmitKeyDown}
+              />
             </FormControl>
           </Box>
           <Box>
@@ -83,6 +93,7 @@ export function MemberLogin() {
                   h={12}
                   type={showAndHide ? "text" : "password"}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleSubmitKeyDown}
                 />
                 <InputRightElement
                   height="100%" // InputGroup의 높이에 맞게 설정

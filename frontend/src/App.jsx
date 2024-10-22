@@ -51,8 +51,6 @@ axios.interceptors.response.use(
         }
       } catch (tokenRefreshError) {
         console.error("리프레시 토큰 만료", tokenRefreshError);
-        // 리프레시 토큰도 만료되었을 경우, 로그인 페이지로 리디렉션
-        window.location.href = "/login";
       }
     }
 
