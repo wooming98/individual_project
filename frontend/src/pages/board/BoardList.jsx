@@ -8,6 +8,7 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -19,6 +20,7 @@ import {
   faAngleRight,
   faAnglesLeft,
   faAnglesRight,
+  faPen,
   faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -67,7 +69,10 @@ export function BoardList() {
           <Box>다양한 사람을 만나고 생각의 폭을 넓혀보세요.</Box>
         </Box>
         <Box>
-          <Button onClick={handleWrite}>작성하기</Button>
+          <Button onClick={handleWrite}>
+            <FontAwesomeIcon icon={faPen} />
+            <Text ml={3}>작성하기</Text>
+          </Button>
         </Box>
         <Divider mt={5} borderColor="#949192" />
         <Box mt={5}>

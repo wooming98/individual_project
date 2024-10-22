@@ -24,7 +24,11 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLock,
+  faUserMinus,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function MemberProfile() {
@@ -169,8 +173,10 @@ export function MemberProfile() {
           <Button
             onClick={handleClickPasswordChanges}
             style={{ backgroundColor: "#EF4444", color: "#ffffff" }}
+            w={180}
           >
-            비밀번호 변경
+            <FontAwesomeIcon icon={faLock} />
+            <Text ml={5}>비밀번호 변경</Text>
           </Button>
         </Flex>
         <Divider mt={7} borderColor="#949192" />
@@ -195,8 +201,10 @@ export function MemberProfile() {
             <Button
               onClick={onOpen}
               style={{ backgroundColor: "#EF4444", color: "#ffffff" }}
+              w={180}
             >
-              회원 탈퇴
+              <FontAwesomeIcon icon={faUserMinus} />
+              <Text ml={5}>회원 탈퇴</Text>
             </Button>
           </Flex>
         </Box>
