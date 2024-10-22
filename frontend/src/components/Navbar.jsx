@@ -1,7 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
 import { useContext } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -41,29 +53,41 @@ export function Navbar() {
           로그인/회원가입
         </Button>
       ) : (
-        <Button
-          onClick={() => {
-            account.logout();
-            navigate("/");
-          }}
-          cursor={"pointer"}
-          p={6}
-          fontSize={14}
-          fontWeight={600}
-          border="2px solid"
-          borderColor="gray.300"
-        >
-          로그아웃
-        </Button>
-      )}
-      {account.accessToken && (
-        <Button
-          onClick={() => {
-            navigate("/profile");
-          }}
-        >
-          프로필
-        </Button>
+        <Menu>
+          <MenuButton
+            as={Button}
+            colorScheme="gray"
+            border="1px solid gray"
+            borderColor="gray.300"
+          >
+            <Flex>
+              <Box>{account.nickname}</Box>
+              <Box ml={5}>
+                <FontAwesomeIcon icon={faBars} />
+              </Box>
+            </Flex>
+          </MenuButton>
+          <MenuList>
+            <MenuGroup title="내 계정">
+              <MenuItem
+                onClick={() => {
+                  navigate("/profile");
+                }}
+              >
+                프로필
+              </MenuItem>
+            </MenuGroup>
+            <MenuDivider />
+            <MenuItem
+              onClick={() => {
+                account.logout();
+                navigate("/");
+              }}
+            >
+              로그아웃
+            </MenuItem>
+          </MenuList>
+        </Menu>
       )}
     </Flex>
   );

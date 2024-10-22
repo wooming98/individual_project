@@ -11,6 +11,7 @@ export function LoginProvider({ children }) {
   });
 
   const [memberIndex, setMemberIndex] = useState("");
+  const [nickname, setNickname] = useState("");
 
   // 상태가 변경될 때마다 로컬 스토리지에 저장
   useEffect(() => {
@@ -25,6 +26,7 @@ export function LoginProvider({ children }) {
   const login = (token) => {
     const payload = jwtDecode(token);
     setMemberIndex(payload.memberIndex);
+    setNickname(payload.nickname);
     setAccessToken(token);
   };
 
@@ -38,6 +40,7 @@ export function LoginProvider({ children }) {
       if (response.status === 200) {
         setAccessToken(null);
         setMemberIndex("");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Logout failed : ", error);
@@ -48,6 +51,7 @@ export function LoginProvider({ children }) {
     <LoginContext.Provider
       value={{
         memberIndex,
+        nickname,
         accessToken,
         login,
         logout,
