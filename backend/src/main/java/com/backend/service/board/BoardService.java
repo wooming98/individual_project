@@ -25,9 +25,15 @@ public class BoardService {
 
         Integer offset = (page - 1) * 10;
         Integer lastPageNumber = (countAll - 1) / 10 + 1;
+        // 10개의 버튼 중 처음 시작 번호
+        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
+        // 10개의 버튼 중 마지막 번호
+        Integer rightPageNumber = leftPageNumber + 9;
 
         pageInfo.put("currentPageNumber", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
+        pageInfo.put("leftPageNumber", leftPageNumber);
+        pageInfo.put("rightPageNumber", rightPageNumber);
 
         return Map.of("pageInfo", pageInfo,
                 "boardList", boardMapper.list(offset));
