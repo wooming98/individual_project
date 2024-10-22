@@ -29,6 +29,8 @@ public class BoardService {
         Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
         // 10개의 버튼 중 마지막 번호
         Integer rightPageNumber = leftPageNumber + 9;
+        //
+        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
 
         pageInfo.put("currentPageNumber", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
