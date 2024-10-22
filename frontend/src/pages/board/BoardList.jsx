@@ -57,7 +57,7 @@ export function BoardList() {
 
   return (
     <Center>
-      <Box w={{ base: "720px", sm: "640px", lg: "960px" }}>
+      <Box width="1200px">
         <Box
           border={"1px solid gray"}
           borderRadius={"1rem"}
