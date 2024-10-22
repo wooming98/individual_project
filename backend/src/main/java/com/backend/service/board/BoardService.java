@@ -29,13 +29,25 @@ public class BoardService {
         Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
         // 10개의 버튼 중 마지막 번호
         Integer rightPageNumber = leftPageNumber + 9;
-        //
+        // 마지막 페이지는 마지막 페이지만 나오게끔
         rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
+        // 이전 페이지 ( < )
+        Integer prevPageNumber = leftPageNumber - 1;
+        // 다음 페이지 ( > )
+        Integer nextPageNumber = rightPageNumber + 1;
 
         pageInfo.put("currentPageNumber", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
+
+        // 이전버튼, 다음버튼
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
 
         return Map.of("pageInfo", pageInfo,
                 "boardList", boardMapper.list(offset));

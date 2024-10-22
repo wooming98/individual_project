@@ -14,7 +14,13 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { faUserPen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faAnglesLeft,
+  faAnglesRight,
+  faUserPen,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../components/LoginProvider.jsx";
@@ -97,6 +103,20 @@ export function BoardList() {
           )}
           <Center mt={10}>
             <Flex gap={1}>
+              {pageInfo.prevPageNumber && (
+                <>
+                  <Button onClick={() => navigate(`/?page=1`)}>
+                    <FontAwesomeIcon icon={faAnglesLeft} />
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigate(`/?page=${pageInfo.prevPageNumber}`)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                  </Button>
+                </>
+              )}
               {pageNumbers.map((pageNumber) => (
                 <Button
                   onClick={() => navigate(`/?page=${pageNumber}`)}
@@ -108,6 +128,24 @@ export function BoardList() {
                   {pageNumber}
                 </Button>
               ))}
+              {pageInfo.nextPageNumber && (
+                <>
+                  <Button
+                    onClick={() =>
+                      navigate(`/?page=${pageInfo.nextPageNumber}`)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faAngleRight} />
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigate(`/?page=${pageInfo.lastPageNumber}`)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faAnglesRight} />
+                  </Button>
+                </>
+              )}
             </Flex>
           </Center>
         </Box>
