@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
   Button,
   Center,
@@ -130,37 +131,46 @@ export function MemberProfile() {
         <Heading size={"md"} mb={10}>
           회원정보
         </Heading>
-        <Box w={500}>
-          <Box mb={7}>
-            <FormControl>
-              <FormLabel>이메일</FormLabel>
-              <Input h={12} value={member.username} readOnly />
-            </FormControl>
-          </Box>
-          <Box mb={7}>
-            <FormControl>
-              <FormLabel>닉네임</FormLabel>
-              <Input
-                h={12}
-                value={member.nickname}
-                onChange={(e) => {
-                  const newNickname = e.target.value.trim();
-                  setMember({ ...member, nickname: newNickname });
-                }}
-              />
-              {isCheckedNickname && (
-                <FormHelperText color="dodgerblue">
-                  사용 가능한 닉네임입니다.
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Box>
-        </Box>
+        <Flex alignItems="center" justify="space-between">
+          <Flex flexDirection="column" w={400}>
+            <Flex mb={7}>
+              <FormControl>
+                <FormLabel>이메일</FormLabel>
+                <Input h={12} value={member.username} readOnly />
+              </FormControl>
+            </Flex>
+            <Flex>
+              <FormControl>
+                <FormLabel>닉네임</FormLabel>
+                <Input
+                  h={12}
+                  value={member.nickname}
+                  onChange={(e) => {
+                    const newNickname = e.target.value.trim();
+                    setMember({ ...member, nickname: newNickname });
+                  }}
+                />
+                {isCheckedNickname && (
+                  <FormHelperText color="dodgerblue">
+                    사용 가능한 닉네임입니다.
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Flex>
+          </Flex>
+          <Avatar
+            cursor="pointer"
+            _hover={{ filter: "brightness(0.7)" }}
+            w="180px"
+            h="180px"
+          />
+        </Flex>
         <Flex justify={"flex-end"}>
           <Button
             onClick={handleClickSave}
             isDisabled={isDisabled}
             style={{ backgroundColor: "#0090F9", color: "#ffffff" }}
+            mt={16}
           >
             저장
           </Button>
