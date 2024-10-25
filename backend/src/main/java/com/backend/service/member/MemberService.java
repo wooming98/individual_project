@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -27,6 +29,8 @@ public class MemberService {
 
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    final S3Client s3Client;
 
     // 회원가입 시 입력값이 null, 공백인 경우 잡아내는 메소드
     public boolean signupValidate(Member member) {
@@ -76,7 +80,7 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public void modify(Member member) {
+    public void modify(Member member, MultipartFile profileImage) {
         memberMapper.update(member);
     }
 
