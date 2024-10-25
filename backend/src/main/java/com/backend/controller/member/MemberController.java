@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -64,9 +65,12 @@ public class MemberController {
     
     // 회원 정보 수정
     @PutMapping("modify")
-    public ResponseEntity modify(@RequestBody Member member, Authentication authentication) {
+    public ResponseEntity modify(Member member,
+                                 Authentication authentication,
+                                 @RequestParam(value="backProfileImage", required = false) MultipartFile profileImage) {
         if(memberService.hasAccessModify(member, authentication)) {
-            memberService.modify(member);
+            System.out.println(profileImage);
+            memberService.modify(member, profileImage);
             return ResponseEntity.ok(member);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

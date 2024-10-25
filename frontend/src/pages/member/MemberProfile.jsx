@@ -33,10 +33,12 @@ import {
 import { LoginContext } from "../../components/LoginProvider.jsx";
 
 export function MemberProfile() {
-  const [member, setMember] = useState(null);
+  const [member, setMember] = useState({});
   const [memberIndex, setMemberIndex] = useState("");
   const [oldNickname, setOldNickname] = useState("");
   const [isCheckedNickname, setIsCheckedNickname] = useState(false);
+  const [frontProfileImage, setFrontProfileImage] = useState(null);
+  const [backProfileImage, setBackProfileImage] = useState(null);
 
   const navigate = useNavigate();
   const toast = useToast();
@@ -75,7 +77,7 @@ export function MemberProfile() {
   // 회원 정보 수정 버튼 함수
   function handleClickSave() {
     axios
-      .put(`api/member/modify`, { ...member })
+      .putForm(`api/member/modify`, { ...member, backProfileImage })
       .then(() => {
         toast({
           status: "success",
@@ -121,6 +123,25 @@ export function MemberProfile() {
     navigate("/password-changes");
   }
 
+  function handleFileChange(e) {
+    // 사용자가 업로드한 파일 가져오기
+    const file = e.target.files[0];
+    // 파일이 있는지 확인
+    if (file) {
+      // backend로 넘기기 위해 상태에 저장
+      setBackProfileImage(file);
+      // new FileReader()은 브라우저에서 파일을 읽이 위해 사용하는 객체
+      const reader = new FileReader();
+      // 파일 읽기가 끝났을 때 실행할 이벤트 핸들러 정의
+      reader.onloadend = () => {
+        // 파일 내용을 Data URL(Base64) 형식으로 변환하여 setProfileImage 함수로 상태에 저장
+        setFrontProfileImage(reader.result);
+      };
+      // 파일을 Data URL 형식으로 읽기
+      reader.readAsDataURL(file);
+    }
+  }
+
   if (member === null) {
     return <Spinner />;
   }
@@ -158,12 +179,21 @@ export function MemberProfile() {
               </FormControl>
             </Flex>
           </Flex>
-          <Avatar
-            cursor="pointer"
-            _hover={{ filter: "brightness(0.7)" }}
-            w="180px"
-            h="180px"
-          />
+          <FormLabel>
+            <Avatar
+              cursor="pointer"
+              _hover={{ filter: "brightness(0.7)" }}
+              w="180px"
+              h="180px"
+              src={frontProfileImage}
+            />
+            <Input
+              onChange={handleFileChange}
+              display="none"
+              type="file"
+              accept="image/*"
+            />
+          </FormLabel>
         </Flex>
         <Flex justify={"flex-end"}>
           <Button
