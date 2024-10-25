@@ -2,25 +2,19 @@ package com.backend.service.member;
 
 import com.backend.domain.member.Member;
 import com.backend.mapper.member.MemberMapper;
-import com.backend.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.IOException;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -29,8 +23,10 @@ public class MemberService {
 
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
-
     final S3Client s3Client;
+
+    @Value("${aws.s3.bucket.name}")
+    String bucketName;
 
     // 회원가입 시 입력값이 null, 공백인 경우 잡아내는 메소드
     public boolean signupValidate(Member member) {
@@ -80,7 +76,17 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public void modify(Member member, MultipartFile profileImage) {
+    public void modify(Member member, MultipartFile profileImage) throws IOException {
+
+        String key = String.format("member/%s/%s", member.getMemberIndex(), profileImage.getOriginalFilename());
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+        s3Client.putObject(objectRequest, RequestBody.fromInputStream(profileImage.getInputStream(), profileImage.getSize()));
+
         memberMapper.update(member);
     }
 

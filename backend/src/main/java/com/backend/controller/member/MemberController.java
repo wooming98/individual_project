@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -67,7 +68,7 @@ public class MemberController {
     @PutMapping("modify")
     public ResponseEntity modify(Member member,
                                  Authentication authentication,
-                                 @RequestParam(value="backProfileImage", required = false) MultipartFile profileImage) {
+                                 @RequestParam(value="backProfileImage", required = false) MultipartFile profileImage) throws IOException {
         if(memberService.hasAccessModify(member, authentication)) {
             System.out.println(profileImage);
             memberService.modify(member, profileImage);
