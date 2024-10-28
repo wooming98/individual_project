@@ -1,6 +1,7 @@
 package com.backend.service.member;
 
 import com.backend.domain.member.Member;
+import com.backend.domain.member.MemberProfile;
 import com.backend.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,8 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -26,8 +29,12 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
     final S3Client s3Client;
 
+    // 버켓 이름
     @Value("${aws.s3.bucket.name}")
     String bucketName;
+    // 해당 이미지 URI 앞쪽
+    @Value("${image.src.prefix}")
+    String srcPrefix;
 
     // 회원가입 시 입력값이 null, 공백인 경우 잡아내는 메소드
     public boolean signupValidate(Member member) {
@@ -56,8 +63,20 @@ public class MemberService {
     }
 
     // 유저네임을 가진 멤버가 있는지 확인 메소드
-    public Member getByUsername(String username) {
-        return memberMapper.selectByUsername(username.trim());
+    public Map<String, Object> getByUsername(String username) {
+        Map<String, Object> result = new HashMap<>();
+        // username으로 DB에 있는 멤버 정보 가져와서 map에 담기
+        Member dbMember = memberMapper.selectByUsername(username.trim());
+        result.put("member", dbMember);
+
+        // MemberProfile 객체 만들어서 name과 src 입력 후 map에 담기
+        MemberProfile memberProfile = new MemberProfile();
+        memberProfile.setName(memberMapper.getProfileImage(dbMember.getMemberIndex()));
+        String src = String.format(srcPrefix + "member/%s/%s", dbMember.getMemberIndex(), memberProfile.getName());
+        memberProfile.setSrc(src);
+        result.put("profile", memberProfile);
+
+        return result;
     }
 
     // 회원 정보 수정 시 유효성 검사

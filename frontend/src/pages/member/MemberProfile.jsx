@@ -39,6 +39,7 @@ export function MemberProfile() {
   const [isCheckedNickname, setIsCheckedNickname] = useState(false);
   const [frontProfileImage, setFrontProfileImage] = useState(null);
   const [backProfileImage, setBackProfileImage] = useState(null);
+  const [oldProfile, setOldProfile] = useState(null);
 
   const navigate = useNavigate();
   const toast = useToast();
@@ -50,10 +51,14 @@ export function MemberProfile() {
   // 화면이 렌더링 될 때 한 번 member 객체 가져오기
   useEffect(() => {
     axios.get(`api/member/profile`).then((res) => {
-      const resMember = res.data;
+      const resMember = res.data.member;
       setMember({ ...resMember });
       setOldNickname(resMember.nickname);
       setMemberIndex(resMember.memberIndex);
+
+      const resProfile = res.data.profile;
+      setFrontProfileImage(resProfile.src);
+      setOldProfile(resProfile.src);
     });
   }, []);
 
@@ -107,22 +112,7 @@ export function MemberProfile() {
     });
   }
 
-  // 조건에 맞지 않을 시 저장(수정) 버튼 비활성화
-  let isDisabled = false;
-
-  // member가 null 또는 undefined가 아닌지 확인 후 nickname 비교
-  if (member && member.nickname === oldNickname) {
-    isDisabled = true;
-  }
-
-  if (!isCheckedNickname) {
-    isDisabled = true;
-  }
-
-  function handleClickPasswordChanges() {
-    navigate("/password-changes");
-  }
-
+  // 파일 업로드
   function handleFileChange(e) {
     // 사용자가 업로드한 파일 가져오기
     const file = e.target.files[0];
@@ -139,7 +129,25 @@ export function MemberProfile() {
       };
       // 파일을 Data URL 형식으로 읽기
       reader.readAsDataURL(file);
+    } else {
+      setFrontProfileImage(oldProfile.src);
     }
+  }
+
+  // 조건에 맞지 않을 시 저장(수정) 버튼 비활성화
+  let isDisabled = false;
+
+  // member가 null 또는 undefined가 아닌지 확인 후 nickname 비교
+  if (member && member.nickname === oldNickname) {
+    isDisabled = true;
+  }
+
+  if (!isCheckedNickname) {
+    isDisabled = true;
+  }
+
+  function handleClickPasswordChanges() {
+    navigate("/password-changes");
   }
 
   if (member === null) {

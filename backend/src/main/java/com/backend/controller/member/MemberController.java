@@ -35,7 +35,7 @@ public class MemberController {
     // 이메일 체크
     @GetMapping(value = "check", params = "username")
     public ResponseEntity checkUsername(@RequestParam("username") String username) {
-        Member member = memberService.getByUsername(username);
+        Map<String, Object> member = memberService.getByUsername(username);
         if (member == null) {
             return ResponseEntity.ok(username);
         }
@@ -55,7 +55,7 @@ public class MemberController {
     // 프로필 정보 가져오기
     @GetMapping("profile")
     public ResponseEntity profile(Authentication authentication) {
-        Member member = memberService.getByUsername(authentication.getName());
+        Map<String, Object> member = memberService.getByUsername(authentication.getName());
 
         if(member == null) {
             return ResponseEntity.notFound().build();
