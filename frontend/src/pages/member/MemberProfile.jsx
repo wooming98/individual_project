@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   Divider,
   Flex,
   FormControl,
@@ -40,6 +41,7 @@ export function MemberProfile() {
   const [frontProfileImage, setFrontProfileImage] = useState(null);
   const [backProfileImage, setBackProfileImage] = useState(null);
   const [oldProfile, setOldProfile] = useState(null);
+  const [checkBox, setCheckBox] = useState(false);
 
   const navigate = useNavigate();
   const toast = useToast();
@@ -245,9 +247,16 @@ export function MemberProfile() {
             </Text>
             <Text>삭제된 데이터는 복구할 수 없습니다.</Text>
           </Box>
-          <Flex justify={"flex-end"} mt={10}>
+          <Flex justifyContent="space-between" mt={10}>
+            <Checkbox
+              isChecked={checkBox}
+              onChange={(e) => setCheckBox(e.target.checked)}
+            >
+              계정 삭제에 관한 정책을 읽고 이에 동의합니다.
+            </Checkbox>
             <Button
               onClick={onOpen}
+              isDisabled={!checkBox}
               style={{ backgroundColor: "#EF4444", color: "#ffffff" }}
               w={180}
             >
