@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -77,21 +78,30 @@ public class MemberService {
 
     // 회원 정보 수정
     public void modify(Member member, MultipartFile profileImage) throws IOException {
+        if(profileImage != null && !profileImage.isEmpty()) {
+            // 파일을 저장할 위치와 권한을 설정
+            String key = String.format("member/%s/%s", member.getMemberIndex(), profileImage.getOriginalFilename());
+            PutObjectRequest updateRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
+            // S3에 객체 업로드
+            s3Client.putObject(updateRequest, RequestBody.fromInputStream(profileImage.getInputStream(), profileImage.getSize()));
 
-        // 파일을 저장할 위치와 권한을 설정
-        String key = String.format("member/%s/%s", member.getMemberIndex(), profileImage.getOriginalFilename());
-        PutObjectRequest objectRequest = PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .acl(ObjectCannedACL.PUBLIC_READ)
-                .build();
-
-        // S3에 객체 업로드
-        s3Client.putObject(objectRequest, RequestBody.fromInputStream(profileImage.getInputStream(), profileImage.getSize()));
-
-        // 새로운 이미지 이름 DB에 업데이트
-        memberMapper.profileImageNameUpdate(member.getMemberIndex(), profileImage.getOriginalFilename());
-
+            // S3에 있던 기존 이미지는 삭제
+            String oldProfileImage = memberMapper.getProfileImage(member.getMemberIndex());
+            String oldKey = String.format("member/%s/%s", member.getMemberIndex(), oldProfileImage);
+            // 파일을 삭제
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(oldKey)
+                    .build();
+            // S3에서 객체 제거
+            s3Client.deleteObject(deleteRequest);
+            // 새로운 이미지 이름 DB에 업데이트
+            memberMapper.profileImageNameUpdate(member.getMemberIndex(), profileImage.getOriginalFilename());
+        }
         // 변경사항 업데이트
         memberMapper.update(member);
     }

@@ -69,4 +69,12 @@ public interface MemberMapper {
             WHERE member_index = #{memberIndex}
             """)
     int profileImageNameUpdate(Integer memberIndex, String profileName);
+
+    // 프로필 이미지 이름 가져오기
+    @Select("""
+            SELECT profile_name
+            FROM profile_image
+            WHERE member_index = #{memberIndex}
+            """)
+    String getProfileImage(Integer memberIndex);
 }
