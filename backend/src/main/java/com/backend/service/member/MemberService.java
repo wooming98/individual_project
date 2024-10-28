@@ -78,6 +78,7 @@ public class MemberService {
     // 회원 정보 수정
     public void modify(Member member, MultipartFile profileImage) throws IOException {
 
+        // 파일을 저장할 위치와 권한을 설정
         String key = String.format("member/%s/%s", member.getMemberIndex(), profileImage.getOriginalFilename());
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -85,8 +86,13 @@ public class MemberService {
                 .acl(ObjectCannedACL.PUBLIC_READ)
                 .build();
 
+        // S3에 객체 업로드
         s3Client.putObject(objectRequest, RequestBody.fromInputStream(profileImage.getInputStream(), profileImage.getSize()));
 
+        // 새로운 이미지 이름 DB에 업데이트
+        memberMapper.profileImageNameUpdate(member.getMemberIndex(), profileImage.getOriginalFilename());
+
+        // 변경사항 업데이트
         memberMapper.update(member);
     }
 

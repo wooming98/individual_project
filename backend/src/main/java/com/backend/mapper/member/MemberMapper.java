@@ -61,4 +61,12 @@ public interface MemberMapper {
             WHERE member_index = #{memberIndex}
             """)
     int deleteByMemberIndex(Integer memberIndex);
+    
+    // 회원 프롤필 이미지 업데이트
+    @Update("""
+            UPDATE profile_image
+            SET profile_name = #{profileName}
+            WHERE member_index = #{memberIndex}
+            """)
+    int profileImageNameUpdate(Integer memberIndex, String profileName);
 }
