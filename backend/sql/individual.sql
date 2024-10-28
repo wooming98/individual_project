@@ -60,3 +60,19 @@ from refresh_token;
 
 select *
 from member;
+
+create table profile_image(
+    profile_index int not null auto_increment primary key,
+    member_index int not null references member(member_index),
+    profile_name varchar(1000)
+);
+
+ALTER TABLE board
+ADD CONSTRAINT board_member_delete
+FOREIGN KEY (member_index) REFERENCES member (member_index)
+ON DELETE CASCADE;
+
+SHOW CREATE TABLE board;
+
+ALTER TABLE board
+    DROP FOREIGN KEY board_ibfk_1;
