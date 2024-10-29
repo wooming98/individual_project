@@ -15,4 +15,5 @@ public class Member {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inserted;
     private String role;
+    private String basicImageUrl;
 }
