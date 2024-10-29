@@ -2,6 +2,8 @@ package com.backend.controller.member;
 
 import com.backend.domain.member.Member;
 import com.backend.service.member.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Update;
@@ -68,11 +70,15 @@ public class MemberController {
     @PutMapping("modify")
     public ResponseEntity modify(Member member,
                                  Authentication authentication,
-                                 @RequestParam(value="backProfileImage", required = false) MultipartFile profileImage) throws IOException {
+                                 @RequestParam(value="backProfileImage", required = false) MultipartFile profileImage,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) throws IOException {
         if(memberService.hasAccessModify(member, authentication)) {
-            System.out.println(profileImage);
+            // 회원 정보 수정
             memberService.modify(member, profileImage);
-            return ResponseEntity.ok(member);
+            // jwt 재발급
+            memberService.reissue(member, authentication, request, response);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

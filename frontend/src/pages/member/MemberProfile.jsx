@@ -91,12 +91,13 @@ export function MemberProfile() {
     ) {
       axios
         .putForm(`api/member/modify`, { ...member, backProfileImage })
-        .then(() => {
+        .then((res) => {
           toast({
             status: "info",
             description: "정보가 수정되었습니다.",
             position: "bottom",
           });
+          account.login(res.headers["access"]);
           navigate("/");
         })
         .catch(() => {

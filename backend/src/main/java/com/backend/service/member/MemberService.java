@@ -2,10 +2,21 @@ package com.backend.service.member;
 
 import com.backend.domain.member.Member;
 import com.backend.domain.member.MemberProfile;
+import com.backend.domain.member.RefreshToken;
 import com.backend.mapper.member.MemberMapper;
+import com.backend.mapper.member.RefreshMapper;
+import com.backend.security.CustomLoginFilter;
+import com.backend.security.CustomUserDetails;
+import com.backend.security.JWTUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +28,10 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 @Service
@@ -26,7 +40,9 @@ import java.util.Map;
 public class MemberService {
 
     private final MemberMapper memberMapper;
+    private final RefreshMapper refreshMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JWTUtil jwtUtil;
     final S3Client s3Client;
 
     // 버켓 이름
@@ -123,6 +139,66 @@ public class MemberService {
         }
         // 변경사항 업데이트
         memberMapper.update(member);
+    }
+
+    // 회원 수정하면서 토큰 재발급 메소드
+    public void reissue(Member member, Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+        String refresh = null;
+        // 리퀘스트에서 쿠키 가져오기
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("refresh")) {
+                refresh = cookie.getValue();
+            }
+        }
+
+        // 토큰생성을 위한 값 가져오기
+        String username = authentication.getName();
+        Integer memberIndex = member.getMemberIndex();
+        String nickname = member.getNickname();
+        // role 값 가져오기
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+        GrantedAuthority auth = iterator.next();
+        String role = auth.getAuthority();
+
+        // 가져온 값들로 새로운 토큰 생성
+        String reAccess = jwtUtil.createJwt("access", username, role, memberIndex, nickname, 600000L);
+        String reRefresh = jwtUtil.createJwt("refresh", username, role, memberIndex, nickname, 86400000L);
+
+        // DB에 있는 기존의 refresh 토큰 삭제 후 새 refresh 토큰 저장
+        refreshMapper.deleteByRefresh(refresh);
+        addRefreshToken(username, reRefresh, 86400000L);
+
+        // response, 응답 헤더에 새로운 토큰 값 넣기
+        response.setHeader("access", reAccess);
+        response.addCookie(createCookie("refresh", reRefresh));
+    }
+
+    // 쿠키 생성 메소드
+    private Cookie createCookie(String key, String value) {
+
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24*60*60);  // 쿠키의 생명주기
+        // cookie.setSecure(true);    // https 통신의 경우 이 값을 넣어줌
+        cookie.setPath("/");       // 쿠키가 적용될 범위
+        cookie.setHttpOnly(true);    // 클라이언트단에서 자바스크립트로 해당 쿠키를 접근하지 못하도록 함
+
+        return cookie;
+    }
+
+    // DB에 넣을 리프레쉬 값 생성
+    private void addRefreshToken(String username, String refresh, Long expiredMs) {
+
+        // 현재 시간 + 만료 시간으로 Timestamp 생성
+        Timestamp expiration = new Timestamp(System.currentTimeMillis() + expiredMs);
+
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setUsername(username);
+        refreshToken.setRefresh(refresh);
+        refreshToken.setExpiration(expiration);
+
+        refreshMapper.insertByRefresh(refreshToken);
     }
 
     // 회원 비밀번호 변경 시 유효성 검사
