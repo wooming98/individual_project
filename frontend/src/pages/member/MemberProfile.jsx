@@ -37,7 +37,7 @@ export function MemberProfile() {
   const [member, setMember] = useState({});
   const [memberIndex, setMemberIndex] = useState("");
   const [oldNickname, setOldNickname] = useState("");
-  const [isCheckedNickname, setIsCheckedNickname] = useState(false);
+  const [isCheckedNickname, setIsCheckedNickname] = useState(true);
   const [frontProfileImage, setFrontProfileImage] = useState(null);
   const [backProfileImage, setBackProfileImage] = useState(null);
   const [oldProfile, setOldProfile] = useState(null);
@@ -83,23 +83,42 @@ export function MemberProfile() {
 
   // 회원 정보 수정 버튼 함수
   function handleClickSave() {
-    axios
-      .putForm(`api/member/modify`, { ...member, backProfileImage })
-      .then(() => {
-        toast({
-          status: "success",
-          description: "정보가 수정되었습니다.",
-          position: "bottom",
+    // 닉네임과 프로필 둘 다 전과 변경사항이 없거나, 닉네임 중복이면 수정 불가능
+    if (
+      ((member && member.nickname !== oldNickname) ||
+        frontProfileImage !== oldProfile) &&
+      isCheckedNickname === true
+    ) {
+      axios
+        .putForm(`api/member/modify`, { ...member, backProfileImage })
+        .then(() => {
+          toast({
+            status: "info",
+            description: "정보가 수정되었습니다.",
+            position: "bottom",
+          });
+          navigate("/");
+        })
+        .catch(() => {
+          toast({
+            status: "error",
+            description: "오류가 발생했습니다.",
+            position: "bottom",
+          });
         });
-        navigate("/");
-      })
-      .catch(() => {
-        toast({
-          status: "error",
-          description: "오류가 발생했습니다.",
-          position: "bottom",
-        });
+    } else if (isCheckedNickname === false) {
+      toast({
+        status: "error",
+        description: "닉네임을 확인해주세요.",
+        position: "bottom",
       });
+    } else {
+      toast({
+        status: "error",
+        description: "정보가 이전과 동일합니다. 변경 후 저장해 주세요.",
+        position: "bottom",
+      });
+    }
   }
 
   function handleClickDelete() {
@@ -136,18 +155,7 @@ export function MemberProfile() {
     }
   }
 
-  // 조건에 맞지 않을 시 저장(수정) 버튼 비활성화
-  let isDisabled = false;
-
-  // member가 null 또는 undefined가 아닌지 확인 후 nickname 비교
-  if (member && member.nickname === oldNickname) {
-    isDisabled = true;
-  }
-
-  if (!isCheckedNickname) {
-    isDisabled = true;
-  }
-
+  // 비밀번호 변경 페이지로 이동
   function handleClickPasswordChanges() {
     navigate("/password-changes");
   }
@@ -181,9 +189,13 @@ export function MemberProfile() {
                     setMember({ ...member, nickname: newNickname });
                   }}
                 />
-                {isCheckedNickname && (
+                {isCheckedNickname ? (
                   <FormHelperText color="dodgerblue">
                     사용 가능한 닉네임입니다.
+                  </FormHelperText>
+                ) : (
+                  <FormHelperText color="tomato">
+                    다른 닉네임을 사용해주세요.
                   </FormHelperText>
                 )}
               </FormControl>
@@ -208,9 +220,9 @@ export function MemberProfile() {
         <Flex justify={"flex-end"}>
           <Button
             onClick={handleClickSave}
-            isDisabled={isDisabled}
             style={{ backgroundColor: "#0090F9", color: "#ffffff" }}
             mt={16}
+            isDisabled={!isCheckedNickname}
           >
             저장
           </Button>

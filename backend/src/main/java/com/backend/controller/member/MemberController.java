@@ -44,9 +44,9 @@ public class MemberController {
 
     // 닉네임 체크
     @GetMapping(value = "check", params = "nickname")
-    public ResponseEntity checkNickname(@RequestParam("nickname") String nickname) {
+    public ResponseEntity checkNickname(@RequestParam("nickname") String nickname, Authentication authentication) {
         Member member = memberService.getByNickname(nickname);
-        if (member == null) {
+        if (member == null || member.getUsername().equals(authentication.getName())) {
             return ResponseEntity.ok(nickname);
         }
         return ResponseEntity.notFound().build();
