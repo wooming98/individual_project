@@ -45,7 +45,7 @@ export function BoardWrite() {
     axios.post("/api/board/add", { title, content, memberIndex }).then(() => {
       toast({
         description: "글이 등록되었습니다.",
-        status: "success",
+        status: "info",
         position: "bottom",
       });
       navigate("/");

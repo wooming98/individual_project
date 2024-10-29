@@ -31,7 +31,7 @@ export function MemberSignup() {
       .post("/api/member/signup", { username, password, nickname })
       .then(() => {
         toast({
-          status: "success",
+          status: "info",
           description: "회원 가입이 완료되었습니다.",
           position: "bottom",
         });

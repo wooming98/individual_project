@@ -53,7 +53,7 @@ export function BoardEdit() {
     axios.put(`/api/board/edit?memberIndex=${memberIndex}`, board).then(() => {
       toast({
         description: "글이 수정되었습니다.",
-        status: "success",
+        status: "info",
         position: "bottom",
       });
       navigate("/");

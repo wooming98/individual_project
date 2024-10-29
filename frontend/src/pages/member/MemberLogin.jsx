@@ -47,7 +47,7 @@ export function MemberLogin() {
         login(accessToken);
 
         toast({
-          status: "success",
+          status: "info",
           description: "로그인 되었습니다.",
           position: "bottom",
         });
@@ -55,7 +55,7 @@ export function MemberLogin() {
       }
     } catch (error) {
       toast({
-        status: "warning",
+        status: "error",
         description: "이메일과 패스워드를 확인해주세요.",
         position: "bottom",
       });

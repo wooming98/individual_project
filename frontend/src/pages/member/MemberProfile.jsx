@@ -125,7 +125,7 @@ export function MemberProfile() {
   function handleClickDelete() {
     axios.delete(`/api/member/${memberIndex}`).then(() => {
       toast({
-        status: "success",
+        status: "info",
         description: "탈퇴하였습니다.",
         position: "bottom",
       });

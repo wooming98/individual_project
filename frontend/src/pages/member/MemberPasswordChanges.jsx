@@ -50,7 +50,7 @@ export function MemberPasswordChanges() {
         account.logout();
         navigate("/");
         toast({
-          status: "success",
+          status: "info",
           description: "비밀번호가 변경되었습니다. 다시 로그인 해주세요.",
           position: "bottom",
         });

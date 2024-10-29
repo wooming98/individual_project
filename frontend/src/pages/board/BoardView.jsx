@@ -41,7 +41,7 @@ export function BoardView() {
     axios.delete(`/api/board/${id}?memberIndex=${memberIndex}`).then(() => {
       toast({
         description: "글이 삭제되었습니다.",
-        status: "success",
+        status: "info",
         position: "bottom",
       });
       navigate("/");
