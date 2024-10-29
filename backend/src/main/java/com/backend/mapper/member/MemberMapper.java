@@ -13,6 +13,7 @@ public interface MemberMapper {
             INSERT INTO member (username, password, nick_name)
             VALUES (#{username}, #{password}, #{nickname})
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "memberIndex")
     int signup(Member member);
 
     // 아이디로 멤버 정보 가져오기
@@ -77,4 +78,11 @@ public interface MemberMapper {
             WHERE member_index = #{memberIndex}
             """)
     String getProfileImage(Integer memberIndex);
+
+    // 프로필 이미지 삽입
+    @Insert("""
+            INSERT INTO profile_image(member_index, profile_name)
+            VALUES (#{memberIndex}, #{profileName})
+            """)
+    int profileImageNameInsert(Integer memberIndex, String profileName);
 }

@@ -14,6 +14,7 @@ import {
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import * as gravatar from "gravatar";
 
 export function MemberSignup() {
   const [username, setUsername] = useState("");
@@ -28,7 +29,12 @@ export function MemberSignup() {
 
   function handleClick() {
     axios
-      .post("/api/member/signup", { username, password, nickname })
+      .post("/api/member/signup", {
+        username,
+        password,
+        nickname,
+        basicImageUrl: "https:" + basicImageUrl,
+      })
       .then(() => {
         toast({
           status: "info",
@@ -127,6 +133,11 @@ export function MemberSignup() {
   if (!isCheckedNickname) {
     isDisabled = true;
   }
+
+  const basicImageUrl = gravatar.url(username, {
+    s: "180px",
+    d: "identicon", // 기본 이미지로 'identicon' 사용
+  });
 
   return (
     <Center>

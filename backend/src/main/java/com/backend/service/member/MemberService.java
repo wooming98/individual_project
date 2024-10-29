@@ -28,6 +28,8 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashMap;
@@ -71,6 +73,36 @@ public class MemberService {
         // 패스워드 암호화
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberMapper.signup(member);
+
+        String basicImageUrl = member.getBasicImageUrl();
+        System.out.println(basicImageUrl);
+
+        try {
+            // 이미지 URL에서 InputStream 가져오기
+            InputStream imageStream = new URL(basicImageUrl).openStream();
+            // 바이트 배열로 읽기
+            byte[] imageBytes = imageStream.readAllBytes();
+            // 스트림 닫기
+            imageStream.close();
+
+            // 파일을 저장할 위치와 권한을 설정
+            String key = String.format("member/%s/basicImage.png", member.getMemberIndex());
+            PutObjectRequest putRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .acl(ObjectCannedACL.PUBLIC_READ) // 공개 읽기 권한
+                    .build();
+            // RequestBody를 바이트 배열로 설정하여 업로드 S3에 객체 업로드
+            s3Client.putObject(putRequest, RequestBody.fromBytes(imageBytes));
+
+            // 새로운 이미지 이름 DB에 업데이트
+            memberMapper.profileImageNameInsert(member.getMemberIndex(), "basicImage.png");
+
+        } catch (IOException e) {
+            // 로그 기록
+            System.err.println("이미지 업로드 중 오류 발생: " + e.getMessage());
+            throw new RuntimeException("파일 처리 중 오류 발생", e);
+        }
     }
 
     // 닉네임을 가진 멤버가 있는지 확인 메소드
@@ -78,7 +110,12 @@ public class MemberService {
         return memberMapper.selectByNickname(nickname.trim());
     }
 
-    // 유저네임을 가진 멤버가 있는지 확인 메소드
+    // 해당 유저네임으로 멤버가 있는지 확인하는 메소드
+    public Member getByUsernameCheck(String username) {
+        return memberMapper.selectByUsername(username);
+    }
+
+    // 해당 유저네임으로 해당 멤버 정보와 프로필 가져오는 메소드
     public Map<String, Object> getByUsername(String username) {
         Map<String, Object> result = new HashMap<>();
         // username으로 DB에 있는 멤버 정보 가져와서 map에 담기

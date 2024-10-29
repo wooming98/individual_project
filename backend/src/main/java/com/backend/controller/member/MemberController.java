@@ -37,7 +37,7 @@ public class MemberController {
     // 이메일 체크
     @GetMapping(value = "check", params = "username")
     public ResponseEntity checkUsername(@RequestParam("username") String username) {
-        Map<String, Object> member = memberService.getByUsername(username);
+        Member member = memberService.getByUsernameCheck(username);
         if (member == null) {
             return ResponseEntity.ok(username);
         }
