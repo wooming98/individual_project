@@ -12,6 +12,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -268,6 +269,20 @@ public class MemberService {
 
     // 회원 탈퇴
     public void remove(Integer memberIndex) {
+        // S3에 있던 기존 이미지는 삭제
+        String oldProfileImage = memberMapper.getProfileImage(memberIndex);
+        String oldKey = String.format("member/%s/%s", memberIndex, oldProfileImage);
+        // 파일을 삭제
+        DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(oldKey)
+                .build();
+        // S3에서 객체 제거
+        s3Client.deleteObject(deleteRequest);
+
+        // DB에서 프로필 이미지 삭제
+        memberMapper.deleteByProfile(memberIndex);
+        // 회원 삭제
         memberMapper.deleteByMemberIndex(memberIndex);
     }
 }

@@ -85,4 +85,11 @@ public interface MemberMapper {
             VALUES (#{memberIndex}, #{profileName})
             """)
     int profileImageNameInsert(Integer memberIndex, String profileName);
+
+    // 프로필 이미지 삭제
+    @Delete("""
+            DELETE FROM profile_image
+            WHERE member_index = #{memberIndex}
+            """)
+    int deleteByProfile(Integer memberIndex);
 }
