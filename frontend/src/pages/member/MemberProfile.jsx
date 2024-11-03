@@ -208,6 +208,8 @@ export function MemberProfile() {
               _hover={{ filter: "brightness(0.7)" }}
               w="180px"
               h="180px"
+              borderRadius="xl"
+              shadow="2xl"
               src={frontProfileImage}
             />
             <Input
