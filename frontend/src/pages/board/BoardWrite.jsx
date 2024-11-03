@@ -84,7 +84,13 @@ export function BoardWrite() {
         </Box>
         <Flex justifyContent="flex-end" mb={10}>
           <ButtonGroup>
-            <Button>취소</Button>
+            <Button
+              onClick={() => {
+                navigate(`/`);
+              }}
+            >
+              취소
+            </Button>
             <Button onClick={handleClickSave}>등록</Button>
           </ButtonGroup>
         </Flex>
