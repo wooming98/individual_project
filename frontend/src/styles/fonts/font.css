@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('./Pretendard-Regular.woff2') format('woff2'), /* WOFF2 형식 추가 */
+    url('./Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pretendard-Bold';
+    src: url('./Pretendard-Bold.woff2') format('woff2'), /* WOFF2 형식 추가 */
+    url('./Pretendard-Bold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}

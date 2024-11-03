@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home } from "./pages/home/Home.jsx";
-import { ChakraProvider } from "@chakra-ui/react";
 import { MemberLogin } from "./pages/member/MemberLogin.jsx";
 import { BoardList } from "./pages/board/BoardList.jsx";
 import { MemberSignup } from "./pages/member/MemberSignup.jsx";
@@ -10,7 +9,9 @@ import { BoardView } from "./pages/board/BoardView.jsx";
 import { BoardEdit } from "./pages/board/BoardEdit.jsx";
 import axios from "axios";
 import { MemberProfile } from "./pages/member/MemberProfile.jsx";
-import { MemberPasswordChanges } from "./pages/member/MemberPasswordChanges.jsx"; // 쿠키를 자동으로 포함
+import { MemberPasswordChanges } from "./pages/member/MemberPasswordChanges.jsx";
+// 폰트 적용
+import "./styles/fonts/font.css";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -83,9 +84,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <LoginProvider>
-      <ChakraProvider>
-        <RouterProvider router={router} />
-      </ChakraProvider>
+      <RouterProvider router={router} />
     </LoginProvider>
   );
 }
