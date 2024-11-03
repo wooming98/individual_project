@@ -39,9 +39,9 @@ export function Navbar() {
             <Button onClick={toggleColorMode} mr={5}>
               {" "}
               {colorMode === "light" ? (
-                <FontAwesomeIcon icon={faMoon} />
+                <FontAwesomeIcon icon={faMoon} style={{ color: "#8b92a2" }} />
               ) : (
-                <FontAwesomeIcon icon={faSun} />
+                <FontAwesomeIcon icon={faSun} style={{ color: "#FFD43B" }} />
               )}
             </Button>
             {account.accessToken === null ? (
