@@ -66,14 +66,8 @@ export function BoardEdit() {
 
   return (
     <Center>
-      <Box>
-        <Box
-          w={{ base: "720px", sm: "640px", lg: "960px" }}
-          p={"1rem"}
-          mb={5}
-          border={"1px solid gray "}
-          borderRadius={"1rem"}
-        >
+      <Box w="100%" maxW="840px">
+        <Box p={"1rem"} mb={5} border={"1px solid gray "} borderRadius={"1rem"}>
           <Box>
             <FormControl>
               <FormLabel>제목</FormLabel>

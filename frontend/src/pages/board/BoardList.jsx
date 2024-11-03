@@ -57,7 +57,7 @@ export function BoardList() {
 
   return (
     <Center>
-      <Box width="1200px">
+      <Box w="100%" maxW="1280px">
         <Box
           border={"1px solid gray"}
           borderRadius={"1rem"}

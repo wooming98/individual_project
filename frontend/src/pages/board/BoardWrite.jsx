@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -54,14 +55,8 @@ export function BoardWrite() {
 
   return (
     <Center>
-      <Box>
-        <Box
-          w={{ base: "720px", sm: "640px", lg: "960px" }}
-          p={"1rem"}
-          mb={5}
-          border={"1px solid gray "}
-          borderRadius={"1rem"}
-        >
+      <Box w="100%" maxW="840px">
+        <Box p={"1rem"} mb={5} border={"1px solid gray "} borderRadius={"1rem"}>
           <Box>
             <FormControl>
               <FormLabel>제목</FormLabel>

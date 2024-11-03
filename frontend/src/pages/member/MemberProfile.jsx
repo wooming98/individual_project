@@ -167,7 +167,7 @@ export function MemberProfile() {
 
   return (
     <Center>
-      <Box w={720}>
+      <Box w="100%" maxW="720px">
         <Heading size={"md"} mb={10}>
           회원정보
         </Heading>
