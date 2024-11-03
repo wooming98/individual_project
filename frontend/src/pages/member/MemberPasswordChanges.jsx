@@ -23,7 +23,7 @@ export function MemberPasswordChanges() {
   const [member, setMember] = useState(null);
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordCheck, setPssswordCheck] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
   const [ButtonCatch, setButtonCatch] = useState(false);
 
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export function MemberPasswordChanges() {
   // 화면이 렌더링 될 때 한 번 member 객체 가져오기
   useEffect(() => {
     axios.get(`api/member/profile`).then((res) => {
-      const resMember = res.data;
+      const resMember = res.data.member;
       setMember({ ...resMember });
     });
   }, []);
@@ -90,19 +90,31 @@ export function MemberPasswordChanges() {
         <Box mb={7}>
           <FormControl>
             <FormLabel>현재 비밀번호</FormLabel>
-            <Input h={12} onChange={(e) => setOldPassword(e.target.value)} />
+            <Input
+              h={12}
+              type="password"
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
           </FormControl>
         </Box>
         <Box mb={7}>
           <FormControl>
             <FormLabel>신규 비밀번호</FormLabel>
-            <Input h={12} onChange={(e) => setPassword(e.target.value)} />
+            <Input
+              h={12}
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </FormControl>
         </Box>
         <Box mb={7}>
           <FormControl>
             <FormLabel>신규 비밀번호 확인</FormLabel>
-            <Input h={12} onChange={(e) => setPssswordCheck(e.target.value)} />
+            <Input
+              h={12}
+              type="password"
+              onChange={(e) => setPasswordCheck(e.target.value)}
+            />
             {password === passwordCheck || (
               <FormHelperText color="tomato">
                 암호가 일치하지 않습니다.
