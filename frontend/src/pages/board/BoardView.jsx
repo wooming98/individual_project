@@ -23,6 +23,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../components/LoginProvider.jsx";
+import { CommentComponent } from "../../components/comment/CommentComponent.jsx";
 
 export function BoardView() {
   const { id } = useParams();
@@ -104,6 +105,8 @@ export function BoardView() {
           <Box pl={"1rem"}>
             <Viewer initialValue={board.content} />
           </Box>
+          <Divider mb={5} mt={50} borderColor="#949192" />
+          <CommentComponent id={board.boardIndex} />
         </Box>
       </Box>
     </Center>
