@@ -6,7 +6,9 @@ export function CommentWrite({ boardIndex, memberIndex }) {
   const [comment, setComment] = useState("");
 
   function handleSubmitComment() {
-    axios.post("/api/comment/add", { boardIndex, memberIndex, comment });
+    axios
+      .post("/api/comment/add", { boardIndex, memberIndex, comment })
+      .then(() => setComment(""));
   }
 
   return (
