@@ -106,7 +106,10 @@ export function BoardView() {
             <Viewer initialValue={board.content} />
           </Box>
           <Divider mb={5} mt={50} borderColor="#949192" />
-          <CommentComponent id={board.boardIndex} />
+          <CommentComponent
+            boardIndex={board.boardIndex}
+            memberIndex={memberIndex}
+          />
         </Box>
       </Box>
     </Center>

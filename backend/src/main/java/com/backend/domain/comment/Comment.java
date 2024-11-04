@@ -12,6 +12,6 @@ public class Comment {
     private Integer memberIndex;
     private String comment;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate createDate;
+    private LocalDate inserted;
     private String nickName;
 }

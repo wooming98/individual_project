@@ -2,11 +2,11 @@ import { Avatar, Box, Button, Flex, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 
-export function CommentWrite({ id }) {
+export function CommentWrite({ boardIndex, memberIndex }) {
   const [comment, setComment] = useState("");
 
   function handleSubmitComment() {
-    axios.post("/api/comment/add", { id, comment });
+    axios.post("/api/comment/add", { boardIndex, memberIndex, comment });
   }
 
   return (
