@@ -2,13 +2,23 @@ import { Avatar, Box, Button, Flex, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 
-export function CommentWrite({ boardIndex, memberIndex }) {
+export function CommentWrite({
+  boardIndex,
+  memberIndex,
+  isProcessing,
+  setIsProcessing,
+}) {
   const [comment, setComment] = useState("");
 
   function handleSubmitComment() {
+    setIsProcessing(true);
     axios
       .post("/api/comment/add", { boardIndex, memberIndex, comment })
-      .then(() => setComment(""));
+      .then(() => setComment(""))
+      .catch(() => {})
+      .finally(() => {
+        setIsProcessing(false);
+      });
   }
 
   return (
@@ -25,6 +35,7 @@ export function CommentWrite({ boardIndex, memberIndex }) {
       </Flex>
       <Flex justifyContent="flex-end" mt={3}>
         <Button
+          isLoading={isProcessing}
           isDisabled={comment.trim().length === 0}
           onClick={handleSubmitComment}
         >

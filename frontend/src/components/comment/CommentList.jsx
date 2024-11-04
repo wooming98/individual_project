@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Divider, Flex, Spacer } from "@chakra-ui/react";
 
-export function CommentList({ boardIndex, memberIndex }) {
+export function CommentList({ boardIndex, memberIndex, isProcessing }) {
   const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`/api/comment/list/${boardIndex}`)
-      .then((res) => setCommentList(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+    if (!isProcessing) {
+      axios
+        .get(`/api/comment/list/${boardIndex}`)
+        .then((res) => setCommentList(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [isProcessing]);
 
   return (
     <Box margin={8}>
