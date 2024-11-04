@@ -13,5 +13,5 @@ public class Comment {
     private String comment;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inserted;
-    private String nickName;
+    private String nickname;
 }

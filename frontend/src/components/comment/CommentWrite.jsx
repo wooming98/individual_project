@@ -10,18 +10,24 @@ export function CommentWrite({ boardIndex, memberIndex }) {
   }
 
   return (
-    <Box w="100%" margin={8}>
+    <Box margin={8}>
       <Flex w="100%">
         <Avatar w={37} h={37} />
         <Textarea
           ml={5}
           placeholder="댓글을 입력하세요."
           minHeight="100px"
+          value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
       </Flex>
       <Flex justifyContent="flex-end" mt={3}>
-        <Button onClick={handleSubmitComment}>댓글 쓰기</Button>
+        <Button
+          isDisabled={comment.trim().length === 0}
+          onClick={handleSubmitComment}
+        >
+          댓글 쓰기
+        </Button>
       </Flex>
     </Box>
   );

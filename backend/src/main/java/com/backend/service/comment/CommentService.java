@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
@@ -25,5 +27,10 @@ public class CommentService {
     // 댓글 저장
     public void addComment(Comment comment, Authentication authentication) {
         commentMapper.addComment(comment);
+    }
+
+    // 해당 게시물의 댓글 가져오기
+    public List<Comment> getCommentList(int boardIndex) {
+        return commentMapper.getCommentList(boardIndex);
     }
 }
