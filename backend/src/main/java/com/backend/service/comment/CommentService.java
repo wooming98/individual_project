@@ -1,0 +1,29 @@
+package com.backend.service.comment;
+
+import com.backend.domain.comment.Comment;
+import com.backend.mapper.comment.CommentMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional(rollbackFor = Exception.class)
+@RequiredArgsConstructor
+public class CommentService {
+
+    private final CommentMapper commentMapper;
+
+    // comment 객체가 null인지 검증
+    public boolean validate(Comment comment) {
+        if(comment == null) {
+            return false;
+        }
+        return true;
+    }
+
+    // 댓글 저장
+    public void addComment(Comment comment, Authentication authentication) {
+        commentMapper.addComment(comment);
+    }
+}
