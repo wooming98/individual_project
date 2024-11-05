@@ -1,18 +1,27 @@
 import {
   Box,
+  Button,
   Divider,
   Flex,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsis,
   faPenToSquare,
   faTrashCan,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext } from "react";
 import { LoginContext } from "../LoginProvider.jsx";
@@ -25,6 +34,7 @@ export function CommentItem({
   setIsProcessing,
 }) {
   const account = useContext(LoginContext);
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleClickDelete() {
     setIsProcessing(true);
@@ -36,6 +46,7 @@ export function CommentItem({
       .catch()
       .finally(() => {
         setIsProcessing(false);
+        onClose();
       });
   }
 
@@ -58,7 +69,7 @@ export function CommentItem({
                   <FontAwesomeIcon icon={faPenToSquare} /> 수정하기
                 </Text>
               </MenuItem>
-              <MenuItem onClick={handleClickDelete}>
+              <MenuItem onClick={onOpen}>
                 <Text>
                   <FontAwesomeIcon icon={faTrashCan} /> 삭제하기
                 </Text>
@@ -69,6 +80,29 @@ export function CommentItem({
       </Flex>
       <Box>{comment.comment}</Box>
       <Divider mt={5} mb={5} borderColor="#949192" />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <Flex justifyContent="space-between" alignItems="center">
+              <Text>댓글 삭제</Text>
+              <Button style={{ backgroundColor: "white" }} onClick={onClose}>
+                <FontAwesomeIcon icon={faXmark} size="lg" />
+              </Button>
+            </Flex>
+          </ModalHeader>
+          <ModalBody>댓글을 삭제하시겠습니까?</ModalBody>
+          <ModalFooter gap={3}>
+            <Button onClick={onClose}>취소</Button>
+            <Button
+              onClick={handleClickDelete}
+              style={{ backgroundColor: "#0090F9", color: "#ffffff" }}
+            >
+              확인
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
