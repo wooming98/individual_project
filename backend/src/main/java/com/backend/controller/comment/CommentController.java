@@ -55,4 +55,10 @@ public class CommentController {
             return ResponseEntity.badRequest().build();
         }
     }
+    
+    // 댓글 수 가져오기
+    @GetMapping("count/{boardIndex}")
+    public int getCommentCount(@PathVariable int boardIndex) {
+        return commentService.getCommentCount(boardIndex);
+    }
 }

@@ -43,4 +43,9 @@ public class CommentService {
     public void editComment(Comment comment) {
         commentMapper.editComment(comment);
     }
+
+    // 해당 기시물의 댓글 수 가져오기
+    public int getCommentCount(int boardIndex) {
+        return commentMapper.getCommentCount(boardIndex);
+    }
 }

@@ -38,4 +38,12 @@ public interface CommentMapper {
             WHERE comment_index = #{commentIndex}
             """)
     int editComment(Comment comment);
+
+    // 해당 게시물의 댓글 수 가져오기
+    @Select("""
+            SELECT COUNT(*) 
+            FROM comment
+            WHERE board_index = #{boardIndex}
+            """)
+    int getCommentCount(int boardIndex);
 }
