@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Divider, Flex, Spacer } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { CommentItem } from "./CommentItem.jsx";
 
 export function CommentList({ boardIndex, memberIndex, isProcessing }) {
   const [commentList, setCommentList] = useState([]);
@@ -17,15 +18,7 @@ export function CommentList({ boardIndex, memberIndex, isProcessing }) {
   return (
     <Box margin={8}>
       {commentList.map((comment) => (
-        <Box key={comment.id} my={3}>
-          <Flex>
-            <Box>{comment.nickname}</Box>
-            <Spacer />
-            <Box>{comment.inserted}</Box>
-          </Flex>
-          <Box>{comment.comment}</Box>
-          <Divider mt={5} mb={5} borderColor="#949192" />
-        </Box>
+        <CommentItem boardIndex={boardIndex} comment={comment} />
       ))}
     </Box>
   );

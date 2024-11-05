@@ -33,4 +33,9 @@ public class CommentService {
     public List<Comment> getCommentList(int boardIndex) {
         return commentMapper.getCommentList(boardIndex);
     }
+
+    // 댓글 삭제
+    public void deleteComment(Comment comment) {
+        commentMapper.deleteComment(comment);
+    }
 }

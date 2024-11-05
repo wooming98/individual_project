@@ -3,6 +3,7 @@ package com.backend.controller.comment;
 import com.backend.domain.comment.Comment;
 import com.backend.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +32,16 @@ public class CommentController {
     @GetMapping("list/{boardIndex}")
     public List<Comment> getCommentList(@PathVariable int boardIndex) {
         return commentService.getCommentList(boardIndex);
+    }
+    
+    // 댓글 삭제하기
+    @DeleteMapping("delete")
+    public ResponseEntity deleteComment(@RequestBody Comment comment) {
+        if(comment != null) {
+            commentService.deleteComment(comment);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

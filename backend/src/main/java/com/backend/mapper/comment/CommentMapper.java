@@ -1,6 +1,7 @@
 package com.backend.mapper.comment;
 
 import com.backend.domain.comment.Comment;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -19,10 +20,16 @@ public interface CommentMapper {
 
     // 해당 게시물 댓글 가져오기
     @Select("""
-            SELECT c.comment, c.inserted, c.member_index, m.nick_name
+            SELECT c.comment, c.comment_index, c.inserted, c.member_index, m.nick_name
             FROM comment c JOIN member m ON c.member_index = m.member_index
             WHERE board_index = #{boardIndex}
             ORDER BY comment_index;
             """)
     List<Comment> getCommentList(int boardIndex);
+
+    @Delete("""
+            DELETE FROM comment
+            WHERE comment_index = #{commentIndex}
+            """)
+    int deleteComment(Comment comment);
 }
