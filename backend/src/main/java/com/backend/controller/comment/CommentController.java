@@ -37,8 +37,19 @@ public class CommentController {
     // 댓글 삭제하기
     @DeleteMapping("delete")
     public ResponseEntity deleteComment(@RequestBody Comment comment) {
-        if(comment != null) {
+        if(commentService.validate(comment)) {
             commentService.deleteComment(comment);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // 댓글 수정하기
+    @PutMapping("edit")
+    public ResponseEntity editComment(@RequestBody Comment comment) {
+        if(commentService.validate(comment)) {
+            commentService.editComment(comment);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();

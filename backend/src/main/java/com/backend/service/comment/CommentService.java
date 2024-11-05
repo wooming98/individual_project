@@ -38,4 +38,9 @@ public class CommentService {
     public void deleteComment(Comment comment) {
         commentMapper.deleteComment(comment);
     }
+
+    // 댓글 수정
+    public void editComment(Comment comment) {
+        commentMapper.editComment(comment);
+    }
 }
