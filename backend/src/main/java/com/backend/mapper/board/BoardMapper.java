@@ -59,5 +59,4 @@ public interface BoardMapper {
             SELECT COUNT(*) FROM board
             """)
     Integer countAll();
-
 }

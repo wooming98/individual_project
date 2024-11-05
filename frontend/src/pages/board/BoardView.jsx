@@ -2,10 +2,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
+  Avatar,
   Box,
   Center,
   Divider,
   Flex,
+  Heading,
   Menu,
   MenuButton,
   MenuItem,
@@ -28,13 +30,18 @@ import { CommentComponent } from "../../components/comment/CommentComponent.jsx"
 export function BoardView() {
   const { id } = useParams();
   const [board, setBoard] = useState(null);
+  const [profile, setProfile] = useState(null);
+
   const navigate = useNavigate();
   const { memberIndex } = useContext(LoginContext);
   const toast = useToast();
 
   // 해당 게시물 보기
   useEffect(() => {
-    axios.get(`/api/board/${id}`).then((res) => setBoard(res.data));
+    axios.get(`/api/board/${id}`).then((res) => {
+      setBoard(res.data.board);
+      setProfile(res.data.profile);
+    });
   }, []);
 
   // 해당 게시물 삭제
@@ -59,7 +66,8 @@ export function BoardView() {
       <Box w="100%" maxW="840px">
         <Box p={"1rem"} mb={5} border={"1px solid gray "} borderRadius={"1rem"}>
           <Box>
-            <Flex w={"100%"} p={"1rem"}>
+            <Flex w={"100%"} p={"1rem"} alignItems="center" gap={3}>
+              <Avatar src={profile.src} />
               <Flex direction={"column"} w={"100%"}>
                 <Flex w={"100%"} justify={"space-between"}>
                   <Text>{board.nickname}</Text>
@@ -100,7 +108,7 @@ export function BoardView() {
               </Flex>
             </Flex>
           </Box>
-          <Box p={"1rem"}>{board.title}</Box>
+          <Heading p={"1rem"}>{board.title}</Heading>
           <Divider mb={5} borderColor="#949192" />
           <Box pl={"1rem"}>
             <Viewer initialValue={board.content} />

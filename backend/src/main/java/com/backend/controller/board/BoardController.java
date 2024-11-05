@@ -40,7 +40,8 @@ public class BoardController {
     // 글 보기
     @GetMapping("{id}")
     public ResponseEntity get(@PathVariable Integer id) {
-        Board board = boardService.get(id);
+
+        Map<String, Object> board = boardService.get(id);
 
         if (board == null) {
             return ResponseEntity.notFound().build();
