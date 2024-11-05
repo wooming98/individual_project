@@ -18,6 +18,7 @@ export function CommentComponent({ boardIndex, memberIndex }) {
         boardIndex={boardIndex}
         memberIndex={memberIndex}
         isProcessing={isProcessing}
+        setIsProcessing={setIsProcessing}
       />
     </Flex>
   );

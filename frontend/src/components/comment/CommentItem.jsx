@@ -18,13 +18,25 @@ import React, { useContext } from "react";
 import { LoginContext } from "../LoginProvider.jsx";
 import axios from "axios";
 
-export function CommentItem({ boardIndex, comment }) {
+export function CommentItem({
+  boardIndex,
+  comment,
+  isProcessing,
+  setIsProcessing,
+}) {
   const account = useContext(LoginContext);
 
   function handleClickDelete() {
-    axios.delete(`/api/comment/delete`, {
-      data: { commentIndex: comment.commentIndex },
-    });
+    setIsProcessing(true);
+    axios
+      .delete(`/api/comment/delete`, {
+        data: { commentIndex: comment.commentIndex },
+      })
+      .then()
+      .catch()
+      .finally(() => {
+        setIsProcessing(false);
+      });
   }
 
   return (

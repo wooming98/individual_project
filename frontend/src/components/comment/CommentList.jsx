@@ -3,7 +3,12 @@ import axios from "axios";
 import { Box } from "@chakra-ui/react";
 import { CommentItem } from "./CommentItem.jsx";
 
-export function CommentList({ boardIndex, memberIndex, isProcessing }) {
+export function CommentList({
+  boardIndex,
+  memberIndex,
+  isProcessing,
+  setIsProcessing,
+}) {
   const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
@@ -18,7 +23,12 @@ export function CommentList({ boardIndex, memberIndex, isProcessing }) {
   return (
     <Box margin={8}>
       {commentList.map((comment) => (
-        <CommentItem boardIndex={boardIndex} comment={comment} />
+        <CommentItem
+          boardIndex={boardIndex}
+          comment={comment}
+          isProcessing={isProcessing}
+          setIsProcessing={setIsProcessing}
+        />
       ))}
     </Box>
   );
