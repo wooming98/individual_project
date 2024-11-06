@@ -34,7 +34,7 @@ export function CommentWrite({
   }
 
   // 프로필이 로드되기 전에는 로딩 화면을 보여줌
-  if (!profile) {
+  if (account.accessToken && !profile) {
     return <Spinner />;
   }
 
