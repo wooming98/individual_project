@@ -1,17 +1,12 @@
 import {
+  Avatar,
   Box,
   Button,
   Center,
   Divider,
   Flex,
   Heading,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -21,7 +16,6 @@ import {
   faAnglesLeft,
   faAnglesRight,
   faPen,
-  faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -57,7 +51,7 @@ export function BoardList() {
 
   return (
     <Center>
-      <Box w="100%" maxW="1280px">
+      <Box w="100%" maxW="840px">
         <Box
           border={"1px solid gray"}
           borderRadius={"1rem"}
@@ -78,35 +72,33 @@ export function BoardList() {
         <Box mt={5}>
           {boardList.length === 0 && <Center>조회 결과가 없습니다.</Center>}
           {boardList.length > 0 && (
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th>#</Th>
-                  <Th>TITLE</Th>
-                  <Th>
-                    <FontAwesomeIcon icon={faUserPen} />
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {boardList.map((board) => (
-                  <Tr
-                    _hover={{
-                      bgColor: "gray.200",
-                    }}
+            <Box>
+              {boardList.map((board) => (
+                <Box>
+                  <Flex justify={"space-between"} mb={2}>
+                    <Flex alignItems="center">
+                      <Avatar w={6} h={6} mr={1.5} src={board.src} />
+                      <Flex>{board.nickname}</Flex>
+                    </Flex>
+                    <Flex>{board.inserted}</Flex>
+                  </Flex>
+                  <Text
+                    fontWeight="bold"
+                    fontSize="lg"
+                    as="span"
                     cursor={"pointer"}
                     onClick={() => navigate(`/board/${board.boardIndex}`)}
                     key={board.boardIndex}
                   >
-                    <Td>{board.boardIndex}</Td>
-                    <Td>{board.title}</Td>
-                    <Td>{board.nickname}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                    {board.title}
+                  </Text>
+                  <Divider mt={5} mb={5} borderColor="#949192" />
+                </Box>
+              ))}
+            </Box>
           )}
-          <Center mt={10}>
+          {/* 페이징 부분 */}
+          <Center mt={20} mb={75}>
             <Flex gap={1}>
               {pageInfo.prevPageNumber && (
                 <>

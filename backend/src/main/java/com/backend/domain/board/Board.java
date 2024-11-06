@@ -14,4 +14,5 @@ public class Board {
     private LocalDate inserted;
     private Integer memberIndex;
     private String nickname;
+    private String src;
 }

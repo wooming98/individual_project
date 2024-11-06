@@ -9,7 +9,7 @@ import java.util.List;
 public interface BoardMapper {
     // 게시글 목록
     @Select("""
-            SELECT b.board_index, b.title, b.inserted ,m.nick_name
+            SELECT b.board_index, b.title, b.inserted ,m.nick_name, m.member_index
             FROM board b join member m on b.member_index = m.member_index
             ORDER BY b.inserted DESC
             LIMIT #{offset}, 10

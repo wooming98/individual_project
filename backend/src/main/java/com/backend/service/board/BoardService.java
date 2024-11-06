@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,8 +58,17 @@ public class BoardService {
             pageInfo.put("nextPageNumber", nextPageNumber);
         }
 
+        // boardList 가져오기
+        List<Board> boardList = boardMapper.list(offset);
+        // 반복문으로 src 가져오기
+        for (Board board : boardList) {
+            String name = memberMapper.getProfileImage(board.getMemberIndex());
+            String src = String.format(srcPrefix + "member/%s/%s", board.getMemberIndex(), name);
+            board.setSrc(src);
+        }
+
         return Map.of("pageInfo", pageInfo,
-                "boardList", boardMapper.list(offset));
+                "boardList", boardList);
     }
 
     // 글 등록 시 입력값이 null, 공백인 경우 잡아내는 메소드
