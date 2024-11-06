@@ -15,6 +15,7 @@ import {
   faAngleRight,
   faAnglesLeft,
   faAnglesRight,
+  faCommentDots,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -92,6 +93,10 @@ export function BoardList() {
                   >
                     {board.title}
                   </Text>
+                  <Flex justify="end" alignItems="center" gap={1}>
+                    <FontAwesomeIcon icon={faCommentDots} />
+                    <Flex>{board.commentCount}</Flex>
+                  </Flex>
                   <Divider mt={5} mb={5} borderColor="#949192" />
                 </Box>
               ))}

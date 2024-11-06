@@ -15,4 +15,5 @@ public class Board {
     private Integer memberIndex;
     private String nickname;
     private String src;
+    private Integer commentCount;
 }

@@ -15,4 +15,5 @@ public class Comment {
     private LocalDate inserted;
     private String nickname;
     private String src;
+    private Integer commentCount;
 }
