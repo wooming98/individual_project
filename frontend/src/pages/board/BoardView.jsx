@@ -110,7 +110,7 @@ export function BoardView() {
           </Box>
           <Heading p={"1rem"}>{board.title}</Heading>
           <Divider mb={5} borderColor="#949192" />
-          <Box pl={"1rem"}>
+          <Box p={"1rem"}>
             <Viewer initialValue={board.content} />
           </Box>
           <Divider mb={5} mt={50} borderColor="#949192" />

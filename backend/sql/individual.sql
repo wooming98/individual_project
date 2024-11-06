@@ -8,18 +8,12 @@ create table member
     inserted     datetime default current_timestamp() not null
 );
 
-# 비밀번호 길이 변경
-alter table member
-    modify password varchar(255);
-
-
 # 권한 테이블 생성
 # create table authority
 # (
 #     member_index int         not null primary key references member (member_index),
 #     authtype     varchar(20) not null
 # );
-
 
 # 보드 테이블 생성
 create table board
@@ -31,16 +25,6 @@ create table board
     inserted     datetime default current_timestamp() not null
 );
 
-select *
-from board;
-
-update board
-set member_index = 2
-where board_index = 4;
-
-insert into board(title, content)
-values ('제목이야', '내용이야2');
-
 # refresh 테이블 생성
 CREATE TABLE refresh_token
 (
@@ -50,29 +34,28 @@ CREATE TABLE refresh_token
     expiration TIMESTAMP    NOT NULL
 );
 
-select *
-from refresh_token;
-
-
-delete
-from refresh_token;
-
-
-select *
-from member;
-
+# 프로필 이미지 테이블 생성
 create table profile_image(
     profile_index int not null auto_increment primary key,
     member_index int not null references member(member_index),
     profile_name varchar(1000)
 );
 
-ALTER TABLE board
-ADD CONSTRAINT board_member_delete
-FOREIGN KEY (member_index) REFERENCES member (member_index)
-ON DELETE CASCADE;
+# 댓글 테이블 생성
+create table comment
+(
+    comment_index  int not null auto_increment primary key,
+    board_index    int not null,
+    member_index int not null,
+    comment    varchar(1000) not null,
+    inserted datetime default current_timestamp() not null,
+    constraint FK_Member_TO_Comment_1
+        foreign key (member_index) references member (member_index) on delete cascade,
+    constraint FK_Post_TO_Comment_1
+        foreign key (board_index) references board (board_index) on delete cascade
+);
 
-SHOW CREATE TABLE board;
-
-ALTER TABLE board
-    DROP FOREIGN KEY board_ibfk_1;
+INSERT INTO board
+(title, content, member_index)
+SELECT title, content, member_index
+FROM board;

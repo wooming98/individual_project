@@ -8,6 +8,7 @@ export function CommentComponent({ boardIndex, memberIndex }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
 
+  // 댓글 수 가져오기
   useEffect(() => {
     axios.get(`/api/comment/count/${boardIndex}`).then((res) => {
       setCommentCount(res.data);

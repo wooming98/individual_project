@@ -33,7 +33,7 @@ export function Navbar() {
           justify="space-between" // 버튼들을 양쪽 끝으로 배치
           margin="auto"
         >
-          <Button onClick={() => navigate("/")}>Home</Button>
+          <Button onClick={() => navigate("/")}>로고자리</Button>
           {/* 다크모드 */}
           <Flex>
             <Button onClick={toggleColorMode} mr={5}>
