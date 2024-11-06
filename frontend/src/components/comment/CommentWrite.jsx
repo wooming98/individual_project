@@ -1,5 +1,5 @@
-import { Avatar, Box, Button, Flex, Textarea } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { Avatar, Box, Button, Flex, Spinner, Textarea } from "@chakra-ui/react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../LoginProvider.jsx";
 
@@ -10,8 +10,18 @@ export function CommentWrite({
   setIsProcessing,
 }) {
   const [comment, setComment] = useState("");
+  const [profile, setProfile] = useState(null);
   const account = useContext(LoginContext);
 
+  // 프로필 이미지 가져오기
+  useEffect(() => {
+    axios.get("/api/member/profile").then((res) => {
+      console.log("Profile data:", res.data.profile);
+      setProfile(res.data.profile);
+    });
+  }, []);
+
+  // 댓글 내용 저장하기
   function handleSubmitComment() {
     setIsProcessing(true);
     axios
@@ -21,6 +31,11 @@ export function CommentWrite({
       .finally(() => {
         setIsProcessing(false);
       });
+  }
+
+  // 프로필이 로드되기 전에는 로딩 화면을 보여줌
+  if (!profile) {
+    return <Spinner />;
   }
 
   return (
@@ -37,7 +52,7 @@ export function CommentWrite({
         </Flex>
       ) : (
         <Flex w="100%">
-          <Avatar w={43} h={43} />
+          <Avatar w={43} h={43} src={profile.src} />
           <Textarea
             ml={5}
             placeholder="댓글을 입력하세요."
